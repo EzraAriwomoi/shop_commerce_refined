@@ -1,0 +1,146 @@
+.about-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin-top: 10vh;
+}
+
+.about-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.about-header h1 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+}
+
+.about-header p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+section {
+  margin-bottom: 4rem;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+}
+
+.story-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 20px;
+  color: black;
+  /* background-color: #d9d9d9; */
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.story-image {
+  width: 50%;
+  max-width: 500px;
+  border-radius: 2px;
+}
+
+.our-process {
+  margin: 20px;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  background-color: #faf5f5;
+  padding: 30px;
+  border-radius: 15px;
+  font-size: 18px;
+}
+
+.step {
+  background-color: #f8f8f8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.step h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  /* background-color: #d9d9d9; */
+  padding: 30px;
+  border-radius: 15px;
+  font-size: 18px;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.team-member img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.team-member h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+.team-member p {
+  color: #666;
+}
+
+.cta-section {
+  text-align: center;
+  background-color: #f8f8f8;
+  padding: 3rem;
+  border-radius: 8px;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: rgb(168, 111, 35);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .story-content {
+    flex-direction: column;
+  }
+
+  .story-image {
+    width: 100%;
+  }
+
+  .process-steps,
+  .team-members {
+    grid-template-columns: 1fr;
+  }
+}

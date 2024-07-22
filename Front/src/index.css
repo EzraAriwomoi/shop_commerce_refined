@@ -1,0 +1,64 @@
+:root {
+  --background-secondary: #d9d9d9;
+  --primary-color: gold;
+  --secondary-color: #8b4513;
+  --link-color: #0000ee;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "Roboto Condensed", sans-serif;
+  /* transition: ease-in-out.5s; */
+}
+
+input,
+button,
+select {
+  border: none;
+  outline: none;
+  height: 50px;
+  border-radius: 10px;
+  padding: 0px 10px;
+  transition: 0.5s ease-in-out;
+}
+
+button:hover {
+  scale: 1.02;
+  opacity: 0.8;
+}
+
+img:hover {
+  opacity: 0.8;
+}
+
+/*Dont Change */
+
+/* global flex styles*/
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col-start {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.flex-col-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}

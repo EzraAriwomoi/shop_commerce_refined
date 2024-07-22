@@ -1,0 +1,223 @@
+.card1 {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #313133;
+  display: block;
+  height: auto;
+  margin-top: 100px;
+  margin-right: 70px;
+}
+
+.header-edit {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f1f1f2;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.indx {
+  cursor: pointer;
+  display: block;
+  padding-right: 12px;
+}
+
+.head-edit {
+  color: #313133;
+  display: block;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.na {
+  height: 18px;
+  fill: grey;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  padding: 16px;
+  width: 100%;
+  height: 10vh;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.fname,
+.lname,
+.email,
+.location {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 48%;
+  margin-bottom: 16px;
+}
+
+.fN {
+  background-color: #ffffff;
+  border: 1px solid #a3a3a6;
+  border-radius: 4px;
+  color: #313133;
+  cursor: text;
+  display: block;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  padding: 14px 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lbl {
+  background-color: #ffffff;
+  color: #75757a;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  padding: 0 4px;
+}
+
+.fname,
+.lname,
+.email,
+.location {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.wth {
+  display: flex;
+  flex-basis: 50%;
+  padding: 0 8px;
+}
+
+.fiw {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+  position: relative;
+}
+
+.code {
+  font-size: 15px;
+  height: 48px;
+  padding: 14px 16px;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.emailPrefix {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: start;
+}
+
+.ent-email {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+}
+.ent-pass {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+}
+.ent-confpass {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+}
+
+.gen-loc {
+  color: #313133;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  padding-top: 8px;
+  position: relative;
+}
+
+.location {
+  border: 1px solid #a3a3a6;
+  border-radius: 4px;
+  color: #313133;
+  cursor: default;
+  font-size: 15px;
+  height: 48px;
+  padding: 14px 16px;
+  text-align: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.buttonsave {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.divbtn {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 60px;
+}
+.eye {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.eye svg {
+  width: 20px;
+  height: 20px;
+  fill: rgb(197, 196, 196);
+}
+
+.eye svg:hover {
+  fill: rgb(168, 111, 35);
+}
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: calc(100%);
+}
+
+.btnsave {
+  background-color: rgb(168, 111, 35);
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 24px;
+  text-align: center;
+  width: 10vw;
+  height: 45px;
+}

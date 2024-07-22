@@ -1,0 +1,5 @@
+.navbar {
+  height: 7vh;
+  width: 100vw;
+  background-color: var(--background-secondary);
+}

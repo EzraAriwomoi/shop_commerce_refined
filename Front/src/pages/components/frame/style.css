@@ -1,0 +1,26 @@
+.frame {
+  height: 40px;
+  width: 138px;
+  background-color: rgb(168, 111, 35);
+  font-weight: 500;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 130px;
+  margin-left: 50px;
+  color: white;
+  transition: ease-in-out 0.5s;
+}
+.frame2 {
+  height: 40px;
+  width: 138px;
+  font-weight: 500;
+  font-size: 16px;
+  background-color: rgb(168, 111, 35);
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 130px;
+  margin-left: 20px;
+  color: white;
+  transition: ease-in-out 0.5s;
+}

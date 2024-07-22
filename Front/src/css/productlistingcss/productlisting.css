@@ -1,0 +1,350 @@
+.product-list-page {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  min-height: max-content;
+  max-height: max-content;
+}
+
+.product-list-page .div-2 {
+  min-height: 100vh;
+  max-height: auto;
+  position: relative;
+  width: 66%;
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-list-page .group-3 {
+  background-image: url(./image.svg) !important;
+  left: 0 !important;
+  position: absolute !important;
+  top: 0 !important;
+}
+
+.product-list-page .frame-2 {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0px;
+  flex-wrap: wrap;
+}
+
+.product-list-page .group-wrapper {
+  height: 372px;
+  position: relative;
+  width: 297px;
+}
+
+.product-list-page .group-2 {
+  background-color: #d9d9d9;
+  border-radius: 20px;
+  height: 372px;
+  position: relative;
+}
+
+.product-list-page .rectangle {
+  height: 258px;
+  left: 10px;
+  object-fit: cover;
+  position: absolute;
+  top: 13px;
+  width: 275px;
+}
+
+.product-list-page .overlap {
+  height: 40px;
+  left: 5px;
+  position: absolute;
+  top: 302px;
+  width: 135px;
+}
+
+.product-list-page .group-4 {
+  height: 36px;
+  left: 0;
+  position: absolute;
+  top: 4px;
+  width: 85px;
+}
+
+.product-list-page .overlap-group-wrapper {
+  height: 34px;
+  left: 20px;
+  position: absolute;
+  top: 0;
+  width: 115px;
+}
+
+.product-list-page .overlap-group {
+  height: 34px;
+  position: relative;
+  width: 111px;
+}
+
+.product-list-page .text-wrapper-2 {
+  color: #000000;
+  font-family: "Inter-Bold", Helvetica;
+  font-size: 18px;
+  font-weight: 700;
+  height: 19px;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  bottom: 20px;
+  white-space: nowrap;
+}
+
+.product-list-page .kes {
+  color: transparent;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 16px;
+  font-weight: 600;
+  height: 16px;
+  left: 1px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  text-align: center;
+  top: 18px;
+}
+
+.product-list-page .span {
+  color: #000000;
+}
+
+.product-list-page .text-wrapper-3 {
+  color: #019422;
+}
+
+.product-list-page .frame-wrapper {
+  height: 40px;
+  left: 182px;
+  position: absolute;
+  top: 325px;
+  background: transparent;
+  width: 120px;
+}
+
+.product-list-page .frame-3 {
+  align-items: center;
+  background-color: #8b4513; /* You can change this color to your preferred secondary color */
+  border-radius: 2px; /* Changed border-radius to 2px */
+  display: inline-flex;
+  justify-content: center;
+  padding: 10px 16px; /* Adjusted padding for a better look */
+  position: relative;
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.product-list-page .frame-3:hover {
+  background-color: #6e3710; /* Darker shade for hover effect */
+}
+
+.product-list-page .text-wrapper-4 {
+  color: #ffffff;
+  font-family: "Inter-Regular", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  width: fit-content;
+  margin: 0;
+}
+
+.plp-card {
+  height: 400px;
+  width: 24%;
+  background-color: var(--background-secondary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 5px 5px 15px 5px rgba(128, 128, 128, 0.135);
+}
+
+.plp-card:hover {
+  scale: 1.02;
+}
+
+.plp-image {
+  height: 75%;
+  width: 98%;
+}
+
+.plp-image > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.plp-details {
+  height: 30%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+}
+
+.plpd-details {
+  height: 100%;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0px 20px;
+}
+
+.plpd-details > span {
+  color: green;
+  font-size: 14px;
+  margin-top: 5px; /* Added margin-top to create space between text and price */
+}
+
+.plpd-btn {
+  height: 100%;
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plpd-btn > button {
+  height: 35px;
+  width: 95%;
+  border-radius: 6px; 
+  background-color: var(
+    --secondary-color
+  );
+  color: white;
+  border: none; /* Remove border */
+  font-size: 14px; /* Font size for better readability */
+  font-weight: 500; /* Slightly bolder font weight */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.plpd-btn > button:hover {
+  background-color: darken(
+    var(--secondary-color),
+    10%
+  ); /* Darker shade on hover */
+}
+
+.plpd-btn > button:active {
+  background-color: darken(
+    var(--secondary-color),
+    20%
+  ); /* Even darker shade on click */
+}
+
+.product-list-page .line {
+  height: 5px;
+  left: 122px;
+  object-fit: cover;
+  position: absolute;
+  top: 286px;
+  width: 1268px;
+}
+
+.product-list-page .frame-5 {
+  align-items: flex-end;
+  display: inline-flex;
+  gap: 5px;
+  left: 600px;
+  margin-top: 20px; /* Add margin to create space above the numbers */
+  margin-bottom: 20px; /* Add margin to create space below the numbers */
+}
+
+.product-list-page .frame-6 {
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #444343;
+  border-radius: 2px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  padding: 10px 16px;
+  position: relative;
+}
+
+.product-list-page .text-wrapper-5 {
+  color: #000000;
+  font-family: "Inter-Light", Helvetica;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: normal;
+  margin-top: -1px;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.product-list-page .text-wrapper-6 {
+  color: #000000;
+  font-family: "Inter-Light", Helvetica;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: normal;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.divider1 {
+  width: 94%;
+  height: 1.5px;
+  margin-top: 20px;
+  background-color: #d1d5db;
+  margin-left: 50px;
+}
+
+@media (max-width: 600px) {
+  .product-list-page {
+    width: 100%;
+  }
+
+  .product-list-page .div-2 {
+    width: 100%;
+  }
+
+  .frame-2 {
+    width: 95%;
+    height: auto;
+    flex-wrap: wrap;
+  }
+
+  .plp-card {
+    width: 47%;
+    height: 300px;
+  }
+
+  .plpd-details > h4 {
+    font-size: 14px;
+  }
+
+  .frame-5 {
+    width: 100%;
+  }
+}

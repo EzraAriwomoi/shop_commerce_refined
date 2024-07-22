@@ -1,0 +1,51 @@
+.flex {
+    display: flex;
+}
+  
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .justify-center {
+    justify-content: center;
+  }
+  
+  .py-8 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .gap-2 {
+    gap: 0.5rem;
+  }
+  
+  .bg-primary {
+    background-color: #8b4513;
+  }
+  button{
+    width: 3.4rem;
+    height: 3rem;
+  }
+  
+  .text-primary-foreground {
+    color: #fff;
+  }
+  
+  .h-4 {
+    height: 1rem;
+    color: #8b4513;
+    width: 2rem;
+  }
+  
+  .svg-icon {
+    display: block;
+  }
+  

@@ -1,0 +1,58 @@
+.order-history {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  .order-history h2 {
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f9f9f9;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 2px solid transparent;
+  }
+  
+  /* Status specific border colors */
+  .text-green-600 {
+    color: #34d399;
+    border-color: #34d399;
+  }
+  
+  .text-yellow-600 {
+    color: #f59e0b;
+    border-color: #f59e0b;
+  }
+  
+  .text-red-600 {
+    color: #ef4444;
+    border-color: #ef4444;
+  }
+  

@@ -1,0 +1,76 @@
+/*Flex styles are defined globaly at index.css and is added as class name*/
+
+.customer-register-component {
+  width: 40%;
+  height: 85vh;
+  min-height: 300px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 2px 10px rgba(128, 128, 128, 0.1);
+}
+
+.crc-heading {
+  height: 7%;
+  width: 100%;
+}
+
+.crc-heading > h1 {
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.crc-inputs {
+  height: 70%;
+  width: 100%;
+  gap: 20px;
+}
+
+.crc-input-div {
+  width: 80%;
+  height: 15%;
+  gap: 1px;
+}
+
+.crc-input-div > label {
+  width: 100%;
+  padding: 5px 0px;
+  color: black;
+  font-size: 14px;
+}
+
+.crc-input-div > input {
+  border: 1px solid gray;
+  width: 100%;
+}
+
+.crc-buttons {
+  height: 7%;
+  width: 100%;
+  margin: 10px 0px;
+  margin-top: 20px;
+}
+
+.crc-buttons > button {
+  height: 50px;
+  width: 50%;
+  background-color: rgb(202, 142, 63);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.crc-sign-section {
+  font-size: 14px;
+  color: darkgray;
+  cursor: pointer;
+}
+
+.crc-sign-in-action {
+  color: #d9d9d9;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .customer-register-component {
+    width: 90%;
+  }
+}
