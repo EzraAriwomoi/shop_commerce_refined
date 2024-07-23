@@ -1,6 +1,6 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useNavigate } from 'react-router-dom';
 import "../css/checkout/checkout.css";
 import NavBar from "../components/layout/NavBar";
 import Footer from "../components/layout/Footer";
@@ -9,6 +9,7 @@ import axios from 'axios';
 export default function Checkout() {
     const [cartItems, setCartItems] = useState([]);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("creditCard");
+    const navigate = useNavigate(); // Initialize navigate for redirection
 
     useEffect(() => {
         fetchCartItems();
@@ -51,6 +52,58 @@ export default function Checkout() {
         setSelectedPaymentMethod(method);
     };
 
+    const clearCart = () => {
+        setCartItems([]); // Clear cart items from state
+    };
+
+    const handlePlaceOrder = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const orderData = {
+                total_price: calculateTotal(),
+                status: 'Pending',
+                created_at: new Date().toISOString(),
+            };
+            
+            // Place order
+            const response = await axios.post("http://localhost:5000/orders/", orderData, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            // Extract order ID from response
+            const orderId = response.data.order_id; // Ensure this matches your backend response
+    
+            // Prepare order items
+            const orderItems = cartItems.map(item => ({
+                order_id: orderId,
+                product_id: item.product_id,
+                quantity: item.quantity,
+            }));
+    
+            // Save order items
+            await axios.post("http://localhost:5000/orders/items", orderItems, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            // Clear the cart
+            clearCart();
+    
+            // Redirect to the order history page
+            navigate('/myaccount');
+    
+            alert('Order placed successfully!');
+        } catch (error) {
+            console.error("Error placing order:", error);
+            alert('Failed to place order');
+        }
+    };
+
     return (
         <>
             <Helmet>
@@ -79,14 +132,13 @@ export default function Checkout() {
                                                     <input className="row-input-shipping" title="shipping address" />
                                                     <button className="change-button">Change</button>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                     <h2 className="header-info-h2">Payment Method</h2>
                                     <div className="payment-container">
                                         <div className="payment-header">
-                                            <p className="payment-description">All transactions are secure and encrypted. Select a payment menthod.</p>
+                                            <p className="payment-description">All transactions are secure and encrypted. Select a payment method.</p>
                                         </div>
                                         <div className="payment-methods">
                                             <div className="payment-method">
@@ -165,7 +217,7 @@ export default function Checkout() {
                                                             <div className={`collapsible-content ${selectedPaymentMethod === "mpesa" ? "active" : ""}`}>
                                                                 <div className="payment-details">
                                                                     <div className="message-header">
-                                                                        <p className="mpesa-description">You will be prompt with a pop-up window to enter your M-PESA pin once you place the order.</p>
+                                                                        <p className="mpesa-description">You will be prompted with a pop-up window to enter your M-PESA pin once you place the order.</p>
                                                                     </div>
                                                                     <div className="payment-field">
                                                                         <input type="phone" placeholder="Enter your m-pesa number" className="field-input"></input>
@@ -197,7 +249,6 @@ export default function Checkout() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        {/* Add other payment methods here if needed */}
                                                     </div>
                                                 </div>
                                             </div>
@@ -240,7 +291,7 @@ export default function Checkout() {
                                     </div>
                                 </div>
                                 <div className="divide-bottom"></div>
-                                <button type="submit" className="pay-now-button">Place order</button>
+                                <button type="button" className="pay-now-button" onClick={handlePlaceOrder}>Place order</button>
                             </div>
                         </div>
                     </div>

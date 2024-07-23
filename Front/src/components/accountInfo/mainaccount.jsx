@@ -9,7 +9,7 @@ import NavBar from "../../components/layout/NavBar";
 
 export default function MainAccount() {
   const [isMobileMenuOpen] = useState(true);
-  const [activeComponent, setActiveComponent] = useState("myaccount");
+  const [activeComponent, setActiveComponent] = useState("orderhistory");
 
   const handleSidebarClick = (component) => {
     setActiveComponent(component);

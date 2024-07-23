@@ -1,84 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import "../../../css/myaccount/orderhistory.css";
 
-function EyeIcon(props) {
+function OrderItem({ item }) {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
+    <div className="order-item">
+      <img src={item.image_url} alt={`Image of ${item.product_name}`} className="order-item-image" />
+      <div className="order-item-details">
+        <span className="order-item-name">{item.product_name}</span>
+        <span className="order-item-qty">{`x${item.quantity}`}</span>
+        <span className="order-item-price">{`Kes. ${item.price}`}</span>
+      </div>
+    </div>
   );
 }
 
-export default function OrderHistory() {
-  const orders = [
-    { id: "#12345", date: "2023-04-15", total: "kes 176.00", status: "Delivered" },
-    { id: "#12346", date: "2023-10-20", total: "kes 429.79", status: "Processing" },
-    { id: "#12347", date: "2024-02-10", total: "kes 7000.00", status: "Cancelled" }
-  ];
+const getStatusColor = (status) => {
+  switch (status.toLowerCase()) {
+    case "delivered":
+      return "delivered";
+    case "processing":
+      return "processing";
+    case "cancelled":
+      return "cancelled";
+    case "pending":
+      return "pending";
+    default:
+      return "";
+  }
+};
 
-  const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case "delivered":
-        return "text-green-600";
-      case "processing":
-        return "text-yellow-600";
-      case "cancelled":
-        return "text-red-600";
-      default:
-        return "";
+export default function OrderHistory() {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/orders/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch orders");
+      }
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
     }
   };
 
   return (
     <div className="order-history">
-      <h2 className="text-xl font-semibold mb-4">Order History</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Order #</th>
-            <th>Date</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>
-                <a href="#" className="text-primary hover:underline">
-                  {order.id}
-                </a>
-              </td>
-              <td>{order.date}</td>
-              <td>{order.total}</td>
-              <td>
-                <span className={`status ${getStatusColor(order.status)}`}>
-                  {order.status}
-                </span>
-              </td>
-              <td>
-                <button size="sm">
-                  <EyeIcon className="h-4 w-4" />
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2 className="header-order-hist">Order History</h2>
+      {orders.length === 0 ? (
+        <p>No orders found.</p>
+      ) : (
+        orders.map((order) => (
+          <div key={order.id} className="order-history-item">
+            <div className="order-summary">
+              <div className="order-summary-header">
+                <span className="order-id">Order #{order.id}</span>
+                <span className="order-date">{new Date(order.created_at).toLocaleDateString()}</span>
+                <span className="order-total">{`Kes. ${order.total_price}`}</span>
+                <span className={`order-status ${getStatusColor(order.status)}`}>{order.status}</span>
+              </div>
+              <div className="order-items">
+                {order.items.map((item) => (
+                  <OrderItem key={item.product_id} item={item} />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 }

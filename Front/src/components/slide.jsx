@@ -6,7 +6,7 @@ export default function Component() {
     <div className="flex flex-col items-center justify-center py-8">
       <div className="flex items-center gap-2">
         <button  size="icon" disabled>
-          <ChevronLeftIcon className="h-4" />
+          <ChevronLeftIcon className="ChevronLeftIcon" />
         </button>
         <button  size="icon" className="bg-primary text-primary-foreground">
           1
