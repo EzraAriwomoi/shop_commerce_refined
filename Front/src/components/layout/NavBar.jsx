@@ -1,5 +1,3 @@
-import "../../css/layoutcss/layout.css";
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -9,6 +7,8 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import CustomerSignInComponent from "../customerauthcomponents/CustomerSignInComponent";
+import "../../css/layoutcss/layout.css";
 
 const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -16,24 +16,28 @@ const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // User authentication state
+  const [isSignInVisible, setIsSignInVisible] = useState(false); // State for sign-in modal
 
   const toggleDropdown = (setter) => {
     setter((prev) => !prev);
   };
 
   const handleSignOut = () => {
-    setIsAuthenticated(false);
+    setIsSignInVisible(false);
     setProfileOpen(false);
   };
 
-  const handleSignIn = () => {
-    setIsAuthenticated(true);
+  const handleSignInClick = () => {
+    setIsSignInVisible(true);
     setProfileOpen(false);
   };
 
   const handleCartClick = () => {
     window.location.href = "/shoppingcart";
+  };
+
+  const closeSignInModal = () => {
+    setIsSignInVisible(false);
   };
 
   return (
@@ -46,8 +50,8 @@ const Navbar = () => {
 
       <div className="mobile-view">
         <div
-          className="mobile-bell-icon "
-          onClick={(e) => setNotificationOpen(!notificationOpen)}
+          className="mobile-bell-icon"
+          onClick={() => setNotificationOpen(!notificationOpen)}
         >
           <FaBell />
           {notificationOpen && <NotificationMenu />}
@@ -65,18 +69,10 @@ const Navbar = () => {
 
       <div className={`navbar-content ${mobileMenuOpen ? "active" : ""}`}>
         <ul className="navbar-links">
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/products">Products</a>
-          </li>
-          <li>
-            <a href="/aboutus">About</a>
-          </li>
-          <li>
-            <a href="/contactus">Contact</a>
-          </li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/products">Products</a></li>
+          <li><a href="/aboutus">About</a></li>
+          <li><a href="/contactus">Contact</a></li>
         </ul>
         <div className="navbar-icons">
           <div className="dropdown">
@@ -89,7 +85,7 @@ const Navbar = () => {
           </div>
           <div className="dropdown">
             <button
-              onClick={(e) => setNotificationOpen(!notificationOpen)}
+              onClick={() => setNotificationOpen(!notificationOpen)}
               className="icon-button"
             >
               {notificationOpen ? <FaTimes /> : <FaBell />}
@@ -114,62 +110,43 @@ const Navbar = () => {
                 <Link to="/myaccount">My Profile</Link>
                 <Link to="/orders">My Orders</Link>
                 <Link to="/settings">Settings</Link>
-                {isAuthenticated ? (
-                  <a href="#" onClick={handleSignOut}>
-                    Logout
-                  </a>
+                {isSignInVisible ? (
+                  <a href="#" onClick={handleSignOut}>Logout</a>
                 ) : (
-                  <a href="/auth" onClick={handleSignIn}>
-                    Sign-In
-                  </a>
+                  <a href="#" onClick={handleSignInClick}>Sign-In</a>
                 )}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {isSignInVisible && <CustomerSignInComponent onClose={closeSignInModal} />}
     </nav>
   );
 };
 
 const NotificationMenu = () => {
   const [notifications, setNotifications] = useState([
-    {
-      productName: "Ring",
-      prodcutId: 1,
-      timeStamp: "12am",
-      imageSrc: "/ring.jpeg",
-    },
-    {
-      productName: "Ring",
-      prodcutId: 1,
-      timeStamp: "12am",
-      imageSrc: "/ring.jpeg",
-    },
-    {
-      productName: "Ring",
-      prodcutId: 1,
-      timeStamp: "12am",
-      imageSrc: "/ring.jpeg",
-    },
+    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
+    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
+    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
   ]);
 
   return (
     <div className="notification-menu">
       <ul className="notf-cont">
-        {notifications.map((a) => {
-          return (
-            <a href="#" className="notf-box">
-              <div className="nb-image">
-                <img src={a.imageSrc} />
-              </div>
-              <div className="nb-details">
-                <h3>{a.productName}</h3>
-                <p>{a.timeStamp}</p>
-              </div>
-            </a>
-          );
-        })}
+        {notifications.map((a, index) => (
+          <a href="#" className="notf-box" key={index}>
+            <div className="nb-image">
+              <img src={a.imageSrc} alt={a.productName} />
+            </div>
+            <div className="nb-details">
+              <h3>{a.productName}</h3>
+              <p>{a.timeStamp}</p>
+            </div>
+          </a>
+        ))}
       </ul>
     </div>
   );

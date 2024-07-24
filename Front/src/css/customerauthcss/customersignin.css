@@ -1,90 +1,170 @@
-/*Flex styles are defined globaly at index.css and is added as class name*/
+.sign-in-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
 
 .customer-sign-in-component {
   width: 40%;
-  height: 85vh;
   min-height: 300px;
-  border-radius: 20px;
-  background-color: #d9d9d9;
-  box-shadow: 0px 2px 10px rgba(128, 128, 128, 0.1);
+  padding: 22px;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-in-out;
+  position: relative;
+  z-index: 1001;
+  pointer-events: all;
+}
+
+.customer-sign-in-component.drop-down {
+  transform: translateY(0);
 }
 
 .csc-heading {
-  height: 10%;
-  width: 100%;
+  margin-bottom: 20px;
 }
 
-.csc-heading > h1 {
-  font-size: 30px;
-  font-weight: 500;
+.csc-heading h1 {
+  font-size: 2rem;
+  color: #8b4513;
+  text-align: center;
 }
 
 .csc-inputs {
-  height: 30%;
   width: 100%;
-  gap: 20px;
+  margin-bottom: 20px;
 }
 
 .csc-input-div {
-  width: 80%;
-  height: 40%;
-  gap: 2px;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
-.csc-input-div > label {
-  width: 100%;
-  padding: 5px 0px;
-  color: black;
+.csc-input-div label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
 }
 
-.csc-input-div > input {
-  border: 1px solid gray;
+.csc-input-div input {
   width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1rem;
 }
 
 .forgot-password {
-  width: 70%;
-  font-size: 14px;
-  justify-content: flex-start;
-  color: rgb(53, 50, 50);
-  font-weight: 500;
-  cursor: pointer;
+  display: block;
+  text-align: right;
+  color: #8b4513;
+  text-decoration: none;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: rgba(255, 0, 0, 0.911);
+  margin-bottom: 15px;
+  text-align: center;
 }
 
 .csc-buttons {
-  height: 10%;
   width: 100%;
-  margin: 10px 0px;
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-.csc-buttons > button {
-  height: 50px;
-  width: 50%;
+.csc-buttons button {
+  width: 100%;
+  padding: 10px;
   background-color: #8b4513;
-  border-radius: 2px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .register-section {
-  font-size: 14px;
-  color: darkgray;
-  font-weight: 500;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
 }
 
 .register-action {
-  color: rgb(104, 95, 83);
-  transition: 0.3s ease-in-out;
-  user-select: none;
-  font-size: 14px;
+  color: #8b4513;
   cursor: pointer;
 }
 
 .register-action:hover {
-  opacity: 0.9;
+  text-decoration: underline;
 }
 
 @media (max-width: 600px) {
   .customer-sign-in-component {
     width: 90%;
   }
+}
+
+.back-to-sign-in {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #8b4513;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.back-to-sign-in:hover {
+  text-decoration: underline;
+}
+
+.reset-password-message {
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #555;
+  transition: color 0.3s ease;
+  z-index: 1002;
+}
+
+.close-btn:hover {
+  color: #8b4513;
+}
+
+.close-btn svg {
+  width: 24px;
+  height: 24px;
 }

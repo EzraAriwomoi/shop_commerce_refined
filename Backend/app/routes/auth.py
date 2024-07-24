@@ -119,15 +119,18 @@ def resend_verification():
 @csrf.exempt
 @token_required
 def logout(current_user):
-    auth_header = request.headers['Authorization']
-    token = auth_header.split()[1]
-    blacklist_token = BlacklistToken(token=token)
-    try:
-        db.session.add(blacklist_token)
-        db.session.commit()
-        return jsonify({'message': 'Logged out successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    auth_header = request.headers.get('Authorization')
+    if auth_header:
+        token = auth_header.split()[1]
+        blacklist_token = BlacklistToken(token=token)
+        try:
+            db.session.add(blacklist_token)
+            db.session.commit()
+            return jsonify({'message': 'Logged out successfully'}), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    else:
+        return jsonify({'error': 'Authorization header is missing'}), 400
 
 @auth_bp.route('/request-password-reset', methods=['POST'])
 @cross_origin()

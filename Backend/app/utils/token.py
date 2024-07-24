@@ -10,6 +10,7 @@ import jwt
 def generate_token(user_id):
     token = jwt.encode(
         {
+            'user_id': user_id,
             'sub': user_id,
             'iat': datetime.datetime.utcnow(),
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)

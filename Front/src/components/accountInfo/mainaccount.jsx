@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/myaccount/myaccount.css";
 import MyAccount from "./subcomponents/myaccount";
 import OrderHistory from "./subcomponents/orderhistory";
@@ -10,9 +11,34 @@ import NavBar from "../../components/layout/NavBar";
 export default function MainAccount() {
   const [isMobileMenuOpen] = useState(true);
   const [activeComponent, setActiveComponent] = useState("orderhistory");
+  const navigate = useNavigate(); 
 
   const handleSidebarClick = (component) => {
     setActiveComponent(component);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        localStorage.removeItem('token');
+        alert('Logged out successfully');
+        navigate('/');
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        alert('Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('Logout failed: ' + error.message);
+    }
   };
 
   return (
@@ -47,7 +73,7 @@ export default function MainAccount() {
               <UserIcon className="icon" />
               <span className="label">Account</span>
             </a>
-            <a className="custom-link">
+            <a onClick={handleLogout} className="custom-link">
               <LogOutIcon className="icon" />
               <span className="label">Logout</span>
             </a>

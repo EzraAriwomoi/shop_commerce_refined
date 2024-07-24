@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../css/customerauthcss/customerregister.css";
 
-const CustomerRegisterComponent = ({ onToggle }) => {
+const CustomerRegisterComponent = ({ onToggle, onClose }) => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -47,74 +47,84 @@ const CustomerRegisterComponent = ({ onToggle }) => {
   };
 
   return (
-    <div className="customer-register-component flex-col">
-      <div className="crc-heading flex">
-        <h1>REGISTER</h1>
+    <>
+      <div className="background-overlay"></div>
+      <div className="sign-in-overlay">
+        <div className="customer-register-component flex-col">
+          <button className="close-btn" onClick={onClose}>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <div className="crc-heading flex">
+            <h1>REGISTER</h1>
+          </div>
+          <form className="crc-inputs flex-col" onSubmit={handleSubmit}>
+            <div className="crc-input-div flex-col-left">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
+                placeholder="First Name"
+                required
+              />
+            </div>
+            <div className="crc-input-div flex-col-left">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div className="crc-input-div flex-col-left">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter email"
+                required
+              />
+            </div>
+            <div className="crc-input-div flex-col-left">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter Password"
+                required
+              />
+            </div>
+            <div className="crc-input-div flex-col-left">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                name="confirm_password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+            <div className="crc-buttons flex">
+              <button type="submit">Register</button>
+            </div>
+          </form>
+          <span className="crc-sign-section">
+            I have an account <span className="crc-sign-in-action" onClick={onToggle}>Sign In</span>
+          </span>
+        </div>
       </div>
-      <form className="crc-inputs flex-col" onSubmit={handleSubmit}>
-        <div className="crc-input-div flex-col-left">
-          <label>First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-            placeholder="First Name"
-            required
-          />
-        </div>
-        <div className="crc-input-div flex-col-left">
-          <label>Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-            placeholder="Last Name"
-            required
-          />
-        </div>
-        <div className="crc-input-div flex-col-left">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter email"
-            required
-          />
-        </div>
-        <div className="crc-input-div flex-col-left">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter Password"
-            required
-          />
-        </div>
-        <div className="crc-input-div flex-col-left">
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            name="confirm_password"
-            value={formData.confirm_password}
-            onChange={handleChange}
-            placeholder="Confirm Password"
-            required
-          />
-        </div>
-        <div className="crc-buttons flex">
-          <button type="submit">Register</button>
-        </div>
-      </form>
-      <span className="crc-sign-section">
-        I have an account <span className="crc-sign-in-action" onClick={onToggle}>Sign In</span>
-      </span>
-    </div>
+    </>
   );
 };
 
