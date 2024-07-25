@@ -8,6 +8,9 @@
   max-height: 70vh;
 }
 
+.header h2{
+  color: #616060;
+}
 
 .colu {
   display: block;

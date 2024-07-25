@@ -16,7 +16,7 @@ const AboutPage = () => {
         </header>
 
         <section className="our-story">
-          <h2>Our Story</h2>
+          <h2 className="headers-about">Our Story</h2>
           <div className="story-content">
             <img
               src="public/zuOPV13g-scaled.jpeg"
@@ -35,7 +35,7 @@ const AboutPage = () => {
         </section>
 
         <section className="our-process">
-          <h2>Our Process</h2>
+          <h2 className="headers-about">Our Process</h2>
           <div className="process-steps">
             <div className="step">
               <h3>1. Consultation</h3>
@@ -69,7 +69,7 @@ const AboutPage = () => {
         </section>
 
         <section className="our-team">
-          <h2>Meet Our Team</h2>
+          <h2 className="headers-about">Meet Our Team</h2>
           <div className="team-members">
             <div className="team-member">
               <img

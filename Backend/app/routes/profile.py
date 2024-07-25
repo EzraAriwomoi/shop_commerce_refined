@@ -1,11 +1,8 @@
-from flask import Blueprint, Flask, request, jsonify
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User
 from app.extensions import db
 from flask_cors import CORS
-from flask_cors import cross_origin
-
-app = Flask(__name__)
 
 profile_bp = Blueprint('profile', __name__)
 CORS(profile_bp, resources={r"/*"})
@@ -15,28 +12,72 @@ CORS(profile_bp, resources={r"/*"})
 def get_profile():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
     return jsonify({
         'full_name': user.full_name,
         'email': user.email,
+        'phone': user.phone,
+        'location': user.location,
+        'mpesaNumber': user.mpesaNumber
     }), 200
 
-@profile_bp.route('/update', methods=['PUT'])
+@profile_bp.route('/update-personal-details', methods=['PUT'])
 @jwt_required()
-def update_profile():
+def update_personal_details():
     user_id = get_jwt_identity()
     data = request.get_json()
-    full_name = data.get('full_name')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
     email = data.get('email')
+    phone = data.get('phone')
 
-    if not all([full_name, email]):
-        return jsonify({'error': 'Full name and email are required'}), 400
+    if not all([first_name, last_name, email, phone]):
+        return jsonify({'error': 'First name, last name, email, and phone are required'}), 400
 
     user = User.query.get(user_id)
     if user:
-        user.full_name = full_name
+        user.full_name = f"{first_name} {last_name}"
         user.email = email
+        user.phone = phone
         db.session.commit()
-        return jsonify({'message': 'Profile updated successfully'}), 200
+        return jsonify({'message': 'Personal details updated successfully'}), 200
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+@profile_bp.route('/update-location', methods=['PUT'])
+@jwt_required()
+def update_location():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    location = data.get('location')
+
+    if not location:
+        return jsonify({'error': 'Location is required'}), 400
+
+    user = User.query.get(user_id)
+    if user:
+        user.location = location
+        db.session.commit()
+        return jsonify({'message': 'Location updated successfully'}), 200
+    else:
+        return jsonify({'error': 'User not found'}), 404
+
+@profile_bp.route('/update-payment', methods=['PUT'])
+@jwt_required()
+def update_payment():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    mpesaNumber = data.get('mpesaNumber')
+
+    if not mpesaNumber:
+        return jsonify({'error': 'M-PESA number is required'}), 400
+
+    user = User.query.get(user_id)
+    if user:
+        user.mpesaNumber = mpesaNumber
+        db.session.commit()
+        return jsonify({'message': 'Payment information updated successfully'}), 200
     else:
         return jsonify({'error': 'User not found'}), 404
 

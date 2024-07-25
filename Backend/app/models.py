@@ -23,6 +23,9 @@ class User(db.Model):
     is_blocked = db.Column(db.Boolean, default=False)
     email_verified = db.Column(db.Boolean, default=False)
     last_login = db.Column(db.DateTime)
+    phone = db.Column(db.String(10), nullable=True)
+    location = db.Column(db.String(255), nullable=True)
+    mpesaNumber = db.Column(db.String(50), nullable=True)
 
     # Relationships
     carts = db.relationship('CartItem', backref='user', lazy='select', cascade='all, delete-orphan')

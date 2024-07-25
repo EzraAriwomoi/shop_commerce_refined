@@ -56,10 +56,10 @@ export default function OrderHistory() {
   };
 
   return (
-    <div className="order-history">
+    <div className="order-table-summary">
       <h2 className="header-order-hist">Order History</h2>
       {orders.length === 0 ? (
-        <p>No orders found.</p>
+        <p>No orders placed.</p>
       ) : (
         orders.map((order) => (
           <div key={order.id} className="order-history-item">

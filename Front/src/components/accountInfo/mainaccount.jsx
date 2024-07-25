@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/myaccount/myaccount.css";
 import MyAccount from "./subcomponents/myaccount";
@@ -11,7 +11,38 @@ import NavBar from "../../components/layout/NavBar";
 export default function MainAccount() {
   const [isMobileMenuOpen] = useState(true);
   const [activeComponent, setActiveComponent] = useState("orderhistory");
-  const navigate = useNavigate(); 
+  const [userDetails, setUserDetails] = useState({ full_name: "Username", email: "youremail@gmail.com" });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch user profile details on component mount
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserDetails({
+            full_name: data.full_name,
+            email: data.email
+          });
+        } else {
+          const data = await response.json();
+          alert('Error: ' + data.error);
+        }
+      } catch (error) {
+        alert('Failed to fetch user details: ' + error.message);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleSidebarClick = (component) => {
     setActiveComponent(component);
@@ -48,28 +79,28 @@ export default function MainAccount() {
         {/* Sidebar */}
         <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
           {/* Sidebar content */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="avator-container">
             <div className="avatar">
-              <img src="/placeholder-user.jpg" alt="User Avatar" className="avatar-image" />
+              <img src="user.bmp" alt="User" className="avatar-image" />
               <div className="avatar-fallback">User</div>
             </div>
             <div className={isMobileMenuOpen ? 'hidden' : ''}>
-              <h2 className="component-title-sidebar">User</h2>
-              <p className="component-subtitle-sidebar">email@example.com</p>
+              <h2 className="component-title-sidebar">{userDetails.full_name}</h2>
+              <p className="component-subtitle-sidebar">{userDetails.email}</p>
             </div>
           </div>
           {/* Navigation links */}
           <div className="head-sidebar">My panel</div>
           <nav className="nav-link">
-            <a onClick={() => handleSidebarClick("orderhistory")} className="custom-link">
+            <a onClick={() => handleSidebarClick("orderhistory")} className={`custom-link ${activeComponent === "orderhistory" ? "active" : ""}`}>
               <PackageIcon className="icon" />
               <span className="label">Orders</span>
             </a>
-            <a onClick={() => handleSidebarClick("wishlist")} className="custom-link">
+            <a onClick={() => handleSidebarClick("wishlist")} className={`custom-link ${activeComponent === "wishlist" ? "active" : ""}`}>
               <HeartIcon className="icon" />
               <span className="label">Wishlist</span>
             </a>
-            <a onClick={() => handleSidebarClick("myaccount")} className="custom-link">
+            <a onClick={() => handleSidebarClick("myaccount")} className={`custom-link ${activeComponent === "myaccount" ? "active" : ""}`}>
               <UserIcon className="icon" />
               <span className="label">Account</span>
             </a>
@@ -178,10 +209,12 @@ function LogOutIcon(props) {
     >
       <path d="M18 3h-13a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-14a2 2 0 0 0-2-2z" />
       <line x1="8" y1="12" x2="16" y2="12" />
-      <line x1="12" y1="8" x2="12" y2="16" />
+      <line x1="12" y1="16" x2="16" y2="12" />
+      <line x1="12" y1="8" x2="16" y2="12" />
     </svg>
   );
 }
+
 
 // function MenuIcon(props) {
 //   return (

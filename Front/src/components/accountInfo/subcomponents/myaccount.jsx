@@ -1,13 +1,155 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+
+// AuthService functions included directly
+const authService = {
+  authHeader: () => {
+    // Assuming you have a token stored in local storage
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.token) {
+      return { Authorization: `Bearer ${user.token}` };
+    } else {
+      return {};
+    }
+  }
+};
 
 export default function MyAccount() {
+  const [userDetails, setUserDetails] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    location: '',
+    mpesaNumber: ''
+  });
+  const [editMode, setEditMode] = useState({
+    personalDetails: false,
+    accountPassword: false,
+    shippingAddress: false,
+    paymentInformation: false,
+  });
 
-  const [editMode, setEditMode] = useState(false);
+  useEffect(() => {
+    // Fetch user details from backend
+    const token = localStorage.getItem("token");
+    axios.get('http://127.0.0.1:5000/profile/', { 
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => {
+        const { full_name, email, phone, location, mpesaNumber } = response.data;
+        const [firstName, lastName] = full_name.split(' ');
+        setUserDetails({ firstName, lastName, email, phone, location, mpesaNumber });
+      })
+      .catch(error => {
+        console.error('Error fetching user details:', error);
+        if (error.response && error.response.status === 401) {
+          // Handle unauthorized access
+          console.error('Unauthorized access - check your token');
+        }
+      });
+  }, []);
 
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setUserDetails(prevDetails => ({
+      ...prevDetails,
+      [id]: value
+    }));
   };
+
+  const toggleEditMode = (section) => {
+    setEditMode(prevEditMode => ({
+      ...prevEditMode,
+      [section]: !prevEditMode[section]
+    }));
+  };
+
+  const handleSave = (section) => {
+    const token = localStorage.getItem("token");
+  
+    switch (section) {
+      case 'personalDetails':
+        axios.put('http://127.0.0.1:5000/profile/update-personal-details', {
+          first_name: userDetails.firstName,
+          last_name: userDetails.lastName,
+          email: userDetails.email,
+          phone: userDetails.phone
+        }, { 
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          alert('Personal details updated successfully!');
+          toggleEditMode(section);
+          window.location.reload();
+        })
+        .catch(error => console.error('Error updating personal details:', error));
+        break;
+  
+      case 'accountPassword': {
+        const { oldPassword, newPassword, confirmPassword } = userDetails;
+        if (newPassword !== confirmPassword) {
+          alert('New passwords do not match!');
+          return;
+        }
+  
+        axios.put('http://127.0.0.1:5000/profile/change-password', {
+          old_password: oldPassword,
+          new_password: newPassword
+        }, { 
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then(() => {
+            alert('Password changed successfully!');
+            toggleEditMode(section);
+          })
+          .catch(error => console.error('Error changing password:', error));
+        break;
+      }
+  
+      case 'shippingAddress':
+        axios.put('http://127.0.0.1:5000/profile/update-location', { location: userDetails.location }, { 
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          alert('Shipping address updated successfully!');
+          toggleEditMode(section);
+        })
+        .catch(error => console.error('Error updating shipping address:', error));
+        break;
+  
+      case 'paymentInformation':
+        axios.put('http://127.0.0.1:5000/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, { 
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          alert('Payment information updated successfully!');
+          toggleEditMode(section);
+        })
+        .catch(error => console.error('Error updating payment information:', error));
+        break;
+  
+      default:
+        console.error('Unknown section:', section);
+    }
+  };
+  
 
   const locations = [
     "A.S.K. Showground/Wanye",
@@ -73,9 +215,13 @@ export default function MyAccount() {
       <section>
         <div className="section-header">
           <h2 className="section-title">Personal Details</h2>
-          <button className="button-outline small-button">
-            <PencilIcon className="pencil-icon" />
-            Edit
+          <button className="button-outline small-button" onClick={() => editMode.personalDetails ? handleSave('personalDetails') : toggleEditMode('personalDetails')}>
+            {editMode.personalDetails ? 'Save' : (
+              <>
+                <PencilIcon className="pencil-icon" />
+                Edit
+              </>
+            )}
           </button>
         </div>
         <div className="section-body">
@@ -83,28 +229,26 @@ export default function MyAccount() {
             <label className="lbl">Full Names</label>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                {/* <label className="lbl">Full Name</label> */}
                 <div className="inputField">
-                  <input id="firstName" type="text" placeholder="First Name" />
+                  <input id="firstName" type="text" placeholder="First Name" value={userDetails.firstName} onChange={handleInputChange} disabled={!editMode.personalDetails} />
                 </div>
               </div>
               <div>
-                <label className="lbl"></label>
                 <div className="inputField">
-                  <input id="lastName" type="text" placeholder="Last Name" />
+                  <input id="lastName" type="text" placeholder="Last Name" value={userDetails.lastName} onChange={handleInputChange} disabled={!editMode.personalDetails} />
                 </div>
               </div>
             </div>
             <div>
-              <label className="lbl">Address</label>
+              <label className="lbl">Email Address</label>
               <div className="inputField">
-                <input id="email" type="email" placeholder="Email Address" />
+                <input id="email" type="email" placeholder="Email Address" value={userDetails.email} onChange={handleInputChange} disabled={!editMode.personalDetails} />
               </div>
             </div>
             <div>
-              {/* <label className="lbl">Phone Number</label> */}
+              <label className="lbl">Phone Number</label>
               <div className="inputField">
-                <input id="phone" type="phone" placeholder="Phone Number" />
+                <input id="phone" type="phone" placeholder="Phone Number" value={userDetails.phone} onChange={handleInputChange} disabled={!editMode.personalDetails} />
               </div>
             </div>
           </div>
@@ -115,8 +259,8 @@ export default function MyAccount() {
       <section>
         <div className="section-header">
           <h2 className="section-title">Account Password</h2>
-          <button className="button-outline small-button" onClick={toggleEditMode}>
-            {editMode ? 'Save' : (
+          <button className="button-outline small-button" onClick={() => editMode.accountPassword ? handleSave('accountPassword') : toggleEditMode('accountPassword')}>
+            {editMode.accountPassword ? 'Save' : (
               <>
                 <PencilIcon className="pencil-icon" />
                 Edit
@@ -127,34 +271,30 @@ export default function MyAccount() {
         <div className="brief-txt">Passwords are end-to-end encrypted. Use a strong password.</div>
         <div className="section-body">
           <div className="contain">
-            {editMode ? (
+            {editMode.accountPassword ? (
               <>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    {/* <label className="lbl">Old Password</label> */}
                     <div className="inputField">
-                      <input id="oldPassword" type="password" placeholder="Enter Old Password" />
+                      <input id="oldPassword" type="password" placeholder="Enter Old Password" onChange={handleInputChange} />
                     </div>
                   </div>
                   <div>
-                    {/* <label className="lbl">New Password</label> */}
                     <div className="inputField">
-                      <input id="newPassword" type="password" placeholder="Enter New Password" />
+                      <input id="newPassword" type="password" placeholder="Enter New Password" onChange={handleInputChange} />
                     </div>
                   </div>
                 </div>
                 <div>
-                  {/* <label className="lbl">Confirm Password</label> */}
                   <div className="inputField">
-                    <input id="confirmPassword" type="password" placeholder="Confirm Password" />
+                    <input id="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleInputChange} />
                   </div>
                 </div>
               </>
             ) : (
               <div>
-                {/* <label className="lbl">Password</label> */}
                 <div className="inputField">
-                  <input id="password" type="password" placeholder="Enter Password" />
+                  <input id="password" type="password" placeholder="Enter Password" value="********" disabled />
                 </div>
               </div>
             )}
@@ -162,39 +302,47 @@ export default function MyAccount() {
         </div>
       </section>
 
-      {/* Shipping section  */}
+      {/* Shipping section */}
       <section>
         <div className="section-header">
           <h2 className="section-title">Shipping Address</h2>
-          <button className="button-outline small-button">
-            <PencilIcon className="pencil-icon" />
-            Edit
+          <button className="button-outline small-button" onClick={() => editMode.shippingAddress ? handleSave('shippingAddress') : toggleEditMode('shippingAddress')}>
+            {editMode.shippingAddress ? 'Save' : (
+              <>
+                <PencilIcon className="pencil-icon" />
+                Edit
+              </>
+            )}
           </button>
         </div>
         <div className="section-body">
           <div className="contain">
             <div>
               <label className="lbl">Location</label>
-              <SelectField id="location" options={locations} />
+              <SelectField id="location" options={locations} value={userDetails.location} onChange={handleInputChange} disabled={!editMode.shippingAddress} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Payment section  */}
+      {/* Payment section */}
       <section>
         <div className="section-header">
           <h2 className="section-title">Payment Information</h2>
-          <button className="button-outline small-button">
-            <PencilIcon className="pencil-icon" />
-            Edit
+          <button className="button-outline small-button" onClick={() => editMode.paymentInformation ? handleSave('paymentInformation') : toggleEditMode('paymentInformation')}>
+            {editMode.paymentInformation ? 'Save' : (
+              <>
+                <PencilIcon className="pencil-icon" />
+                Edit
+              </>
+            )}
           </button>
         </div>
         <div className="section-body">
           <div className="contain">
             <label className="lbl">M-PESA Number</label>
             <div className="inputField">
-              <input id="phone" type="phone" placeholder="M-PESA Number" />
+              <input id="mpesaNumber" type="phone" placeholder="M-PESA Number" value={userDetails.mpesaNumber} onChange={handleInputChange} disabled={!editMode.paymentInformation} />
             </div>
           </div>
           <div className="available-payments">
@@ -227,11 +375,11 @@ function PencilIcon(props) {
   );
 }
 
-function SelectField({ id, options }) {
+function SelectField({ id, options, value, onChange, disabled }) {
   return (
     <div className="select-field">
       <label htmlFor={id}></label>
-      <select id={id}>
+      <select id={id} value={value} onChange={onChange} disabled={disabled}>
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}
