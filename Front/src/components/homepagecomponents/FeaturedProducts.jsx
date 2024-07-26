@@ -5,25 +5,26 @@ const FeaturedProducts = () => {
   const [products, setProducts] = useState([
     {
       productName: "Rings",
-      imageSrc: "public/handbrace.jpg",
+      imageSrc: "/ring.jpeg",
     },
     {
       productName: "Necklace",
-      imageSrc: "public/3 (copy 1).jpg",
+      imageSrc: "/necklace.jpeg",
     },
     {
       productName: "Rings",
-      imageSrc: "public/26.jpg",
+      imageSrc: "/ring.jpeg",
     },
     {
       productName: "Necklace",
-      imageSrc: "public/22.jpg",
+      imageSrc: "/necklace.jpeg",
     },
   ]);
 
   return (
     <div className="featured-products">
       <h3>Featured Products</h3>
+      <p>Selected Just for your Style & Looks</p>
       <div className="fp-div">
         {products.map((a) => {
           return <FPContainer productDetails={a} />;

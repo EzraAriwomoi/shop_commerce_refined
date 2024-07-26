@@ -10,10 +10,19 @@
   padding: 10px 0;
 }
 
+.order-hist-summary{
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  background-color: rgb(247, 245, 245);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .order-table-summary {
   display: flex;
   flex-direction: column;
-  background-color: rgb(248, 246, 246);
+  /* background-color: rgb(248, 246, 246); */
 }
 
 .order-summary-header {
@@ -90,4 +99,30 @@
 .order-item-qty,
 .order-item-price {
   color: #555;
+}
+
+.displayed-no-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty-order-image {
+  height: 14rem;
+  animation: pan 2s forwards; /* Adjust duration and timing as needed */
+}
+
+@keyframes pan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.displayed-no-order p {
+  color: #a7a6a6;
+  font-size: 16px;
+  margin: 0;
 }

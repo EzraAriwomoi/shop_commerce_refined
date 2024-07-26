@@ -142,9 +142,14 @@ function ShoppingCartItems({
 
 export default function ShoppingcartPage() {
   const [cartItems, setCartItems] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetchCartItems();
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+    if (token) {
+      fetchCartItems();
+    }
   }, []);
 
   const proceedtocheckout = () => {
@@ -193,7 +198,6 @@ export default function ShoppingcartPage() {
     <>
       <Helmet>
         <title>Shopping cart</title>
-        <meta name="description" content="Web site created using create-react-app" />
       </Helmet>
       <NavBar />
       <div className="containerA">
@@ -202,6 +206,12 @@ export default function ShoppingcartPage() {
           <p className="itms">{cartItems.length} items selected</p>
         </div>
         <div className="divider"></div>
+        {cartItems.length === 0 ? (
+            <div className="empty-cart-container">
+              <img src="no-cart-item-image.png" alt="No items in cart" className="empty-cart-image" />
+              <p className="empty-cart-text">No items in cart</p>
+            </div>
+          ) : (
         <div className="container2">
           <div className="container3">
             <div className="container4">
@@ -250,6 +260,9 @@ export default function ShoppingcartPage() {
             </div>
           </div>
         </div>
+          )}
+        {cartItems.length > 0 && (
+        <>
         <div className="divider"></div>
         <div className="discount-code">
           <div className="">
@@ -260,6 +273,8 @@ export default function ShoppingcartPage() {
             </div>
           </div>
         </div>
+        </>
+        )}
         <Footer />
       </div>
     </>

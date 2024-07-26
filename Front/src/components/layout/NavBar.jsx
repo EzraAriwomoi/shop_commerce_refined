@@ -7,7 +7,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-import CustomerSignInComponent from "../customerauthcomponents/CustomerSignInComponent";
+import CustomerAuthComponent from "../customerauthcomponents/CustomerAuthComponent";
 import "../../css/layoutcss/layout.css";
 
 const Navbar = () => {
@@ -121,7 +121,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isSignInVisible && <CustomerSignInComponent onClose={closeSignInModal} />}
+      {isSignInVisible && <CustomerAuthComponent onClose={closeSignInModal} />}
     </nav>
   );
 };

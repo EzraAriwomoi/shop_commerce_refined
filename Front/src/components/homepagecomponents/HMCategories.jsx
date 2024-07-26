@@ -4,21 +4,18 @@ const HMCategories = () => {
   return (
     <div className="home-catergories">
       <h3>Explore our catergories</h3>
-      <ul>
-        <a href="#" className="flex">
+      <ul className="hc-div">
+        <a href="#">
           <li>Necklace</li>
         </a>
-        <a href="#" className="flex">
-          <li>Rings</li>
-        </a>
-        <a href="#" className="flex">
-          <li>Bracelets</li>
-        </a>
-        <a href="#" className="flex">
+        <a href="#">
           <li>Necklace</li>
         </a>
-        <a href="#" className="flex">
-          <li>Rings</li>
+        <a href="#">
+          <li>Necklace</li>
+        </a>
+        <a href="#">
+          <li>Necklace</li>
         </a>
       </ul>
     </div>

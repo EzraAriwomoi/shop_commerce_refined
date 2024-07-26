@@ -4,7 +4,7 @@ const FPContainer = ({ productDetails }) => {
       <div className="fpc-image">
         <img src={productDetails.imageSrc} />
       </div>
-      <div className="fpc-details flex">
+      <div className="fpc-details">
         <span>{productDetails.productName}</span>
       </div>
     </div>

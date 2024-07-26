@@ -114,7 +114,7 @@ export default function MainAccount() {
         {/* Main content container */}
         <div className="component-container">
           <div className="component-inner-container">
-            <div className="component-header">
+            {/* <div className="component-header">
               <div className="component-header-content">
                 <header className="header-sum-info">
                   <a className="edit-summary-information" href="">
@@ -125,7 +125,7 @@ export default function MainAccount() {
                   <h2 className="header-infopage-h2">Account Information</h2>
                 </header>
               </div>
-            </div>
+            </div> */}
             <div className="component-body">
               {activeComponent === "orderhistory" && <OrderHistory />}
               {activeComponent === "myaccount" && <MyAccount />}

@@ -30,14 +30,14 @@ const ContactUs = () => {
 
       if (response.ok) {
         // Handle success (e.g., show a success message)
-        console.log('Support ticket submitted successfully');
+        alert('Support ticket submitted successfully');
       } else {
         // Handle error response from server
         const data = await response.json();
-        console.error('Failed to submit support ticket:', data.error);
+        alert('Failed to submit support ticket:', data.error);
       }
     } catch (error) {
-      console.error('Error submitting support ticket:', error);
+      alert('Error submitting support ticket:', error);
     }
   };
 

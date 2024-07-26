@@ -34,7 +34,7 @@ export default function MyAccount() {
   useEffect(() => {
     // Fetch user details from backend
     const token = localStorage.getItem("token");
-    axios.get('http://127.0.0.1:5000/profile/', { 
+    axios.get('http://127.0.0.1:5000/profile/', {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export default function MyAccount() {
 
   const handleSave = (section) => {
     const token = localStorage.getItem("token");
-  
+
     switch (section) {
       case 'personalDetails':
         axios.put('http://127.0.0.1:5000/profile/update-personal-details', {
@@ -79,31 +79,31 @@ export default function MyAccount() {
           last_name: userDetails.lastName,
           email: userDetails.email,
           phone: userDetails.phone
-        }, { 
+        }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
-          alert('Personal details updated successfully!');
-          toggleEditMode(section);
-          window.location.reload();
-        })
-        .catch(error => console.error('Error updating personal details:', error));
+          .then(() => {
+            alert('Personal details updated successfully!');
+            toggleEditMode(section);
+            window.location.reload();
+          })
+          .catch(error => console.error('Error updating personal details:', error));
         break;
-  
+
       case 'accountPassword': {
         const { oldPassword, newPassword, confirmPassword } = userDetails;
         if (newPassword !== confirmPassword) {
           alert('New passwords do not match!');
           return;
         }
-  
+
         axios.put('http://127.0.0.1:5000/profile/change-password', {
           old_password: oldPassword,
           new_password: newPassword
-        }, { 
+        }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -116,40 +116,40 @@ export default function MyAccount() {
           .catch(error => console.error('Error changing password:', error));
         break;
       }
-  
+
       case 'shippingAddress':
-        axios.put('http://127.0.0.1:5000/profile/update-location', { location: userDetails.location }, { 
+        axios.put('http://127.0.0.1:5000/profile/update-location', { location: userDetails.location }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
-          alert('Shipping address updated successfully!');
-          toggleEditMode(section);
-        })
-        .catch(error => console.error('Error updating shipping address:', error));
+          .then(() => {
+            alert('Shipping address updated successfully!');
+            toggleEditMode(section);
+          })
+          .catch(error => console.error('Error updating shipping address:', error));
         break;
-  
+
       case 'paymentInformation':
-        axios.put('http://127.0.0.1:5000/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, { 
+        axios.put('http://127.0.0.1:5000/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => {
-          alert('Payment information updated successfully!');
-          toggleEditMode(section);
-        })
-        .catch(error => console.error('Error updating payment information:', error));
+          .then(() => {
+            alert('Payment information updated successfully!');
+            toggleEditMode(section);
+          })
+          .catch(error => console.error('Error updating payment information:', error));
         break;
-  
+
       default:
         console.error('Unknown section:', section);
     }
   };
-  
+
 
   const locations = [
     "A.S.K. Showground/Wanye",
@@ -208,7 +208,7 @@ export default function MyAccount() {
 
   return (
     <div className="component-body">
-      <div className="brief-txt-header">User Information</div>
+      <div className="brief-txt-header">Account Information</div>
       <div className="brief-txt">Enter the required information below for easy communication and access to account. You can change it anytime you want.</div>
 
       {/* Personal details section */}
@@ -347,7 +347,11 @@ export default function MyAccount() {
           </div>
           <div className="available-payments">
             Current available payments :
-            <img src="/mpesa.png" className="mpesa-logo" alt="M-Pesa" width={70} height={50} />
+            <div className="pay-icons">
+              <img src="/mpesa.png" className="mpesa-logo" alt="M-Pesa" width={70} height={50} />
+              <img alt="VISA" src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" width="38" height="24" className="payment-icon" />
+              <img alt="MASTERCARD" src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/ae9ceec48b1dc489596c.svg" width="38" height="24" className="payment-icon" />
+            </div>
           </div>
         </div>
       </section>

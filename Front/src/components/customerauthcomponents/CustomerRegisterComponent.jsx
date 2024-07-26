@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-import "../../css/customerauthcss/customerregister.css";
+import "../../css/customerauthcss/customersignin.css";
 
-const CustomerRegisterComponent = ({ onToggle, onClose }) => {
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    confirm_password: ""
-  });
+const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [error, setError] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+  }, []);
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
     try {
       const response = await fetch('http://127.0.0.1:5000/auth/signup', {
         method: 'POST',
@@ -25,106 +29,105 @@ const CustomerRegisterComponent = ({ onToggle, onClose }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          full_name: `${formData.first_name} ${formData.last_name}`,
-          email: formData.email,
-          password: formData.password,
-          confirm_password: formData.confirm_password
+          full_name: `${firstName} ${lastName}`,
+          email,
+          password
         }),
       });
-
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error || 'Registration failed');
       }
 
       alert(data.message); // Replace with your preferred UI notification
-      // Optionally redirect or perform other actions after successful registration
+      onChangeView('sign-in'); // Return to sign-in view after successful registration
 
     } catch (error) {
       console.error('Error registering user:', error);
-      alert('Registration failed');
+      setError('Registration failed');
     }
   };
 
+  const handleCloseClick = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  };
+
   return (
-    <>
-      <div className="background-overlay"></div>
-      <div className="sign-in-overlay">
-        <div className="customer-register-component flex-col">
-          <button className="close-btn" onClick={onClose}>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <div className="sign-in-overlay" onClick={(e) => e.target === e.currentTarget && handleCloseClick()}>
+      <div className={`customer-sign-in-component ${isVisible ? 'drop-down' : ''}`}>
+        <div className="csc-heading">
+          <h1>Register</h1>
+          <button className="close-btn" onClick={handleCloseClick}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-x">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
-          <div className="crc-heading flex">
-            <h1>REGISTER</h1>
-          </div>
-          <form className="crc-inputs flex-col" onSubmit={handleSubmit}>
-            <div className="crc-input-div flex-col-left">
-              <label>First Name</label>
-              <input
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                placeholder="First Name"
-                required
-              />
-            </div>
-            <div className="crc-input-div flex-col-left">
-              <label>Last Name</label>
-              <input
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
-                placeholder="Last Name"
-                required
-              />
-            </div>
-            <div className="crc-input-div flex-col-left">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter email"
-                required
-              />
-            </div>
-            <div className="crc-input-div flex-col-left">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter Password"
-                required
-              />
-            </div>
-            <div className="crc-input-div flex-col-left">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                name="confirm_password"
-                value={formData.confirm_password}
-                onChange={handleChange}
-                placeholder="Confirm Password"
-                required
-              />
-            </div>
-            <div className="crc-buttons flex">
-              <button type="submit">Register</button>
-            </div>
-          </form>
-          <span className="crc-sign-section">
-            I have an account <span className="crc-sign-in-action" onClick={onToggle}>Sign In</span>
-          </span>
         </div>
+        <form onSubmit={handleRegister} className="csc-form flex-col">
+          <div className="csc-input-div">
+            <label>First Name</label>
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="csc-input-div">
+            <label>Last Name</label>
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="csc-input-div">
+            <label>Email</label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="csc-input-div">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="csc-input-div">
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          <div className="csc-buttons flex">
+            <button type="submit">Register</button>
+          </div>
+          <span className="back-to-sign-in" onClick={() => onChangeView('sign-in')}>
+            Already have an account? Sign In
+          </span>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 

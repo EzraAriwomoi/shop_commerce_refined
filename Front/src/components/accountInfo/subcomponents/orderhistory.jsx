@@ -57,13 +57,24 @@ export default function OrderHistory() {
 
   return (
     <div className="order-table-summary">
+      {orders.length > 0 && (
       <h2 className="header-order-hist">Order History</h2>
+    )}
       {orders.length === 0 ? (
-        <p>No orders placed.</p>
+       <div className="displayed-no-order">
+        <div className="pan-effect">
+            <img
+              src="no-orders.jpg"
+              alt="No orders placed"
+              className="empty-order-image"
+            />
+          </div>
+        <p>You have placed no orders yet!</p>
+       </div>
       ) : (
         orders.map((order) => (
           <div key={order.id} className="order-history-item">
-            <div className="order-summary">
+            <div className="order-hist-summary">
               <div className="order-summary-header">
                 <span className="order-id">Order #{order.id}</span>
                 <span className="order-date">{new Date(order.created_at).toLocaleDateString()}</span>
