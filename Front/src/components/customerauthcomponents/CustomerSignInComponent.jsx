@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/customerauthcss/customersignin.css";
 
+// eslint-disable-next-line react/prop-types
 const CustomerSignInComponent = ({ onClose, onChangeView }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -88,7 +90,7 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
             <button type="submit">Sign In</button>
           </div>
           <span className="register-section">
-            Don’t have an account?{" "}
+            Don&apos;t have an account?{" "}
             <span className="register-action" onClick={() => onChangeView('register')}>
               Register
             </span>
