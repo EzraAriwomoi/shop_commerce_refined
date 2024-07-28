@@ -379,6 +379,7 @@ function PencilIcon(props) {
   );
 }
 
+// eslint-disable-next-line react/prop-types
 function SelectField({ id, options, value, onChange, disabled }) {
   return (
     <div className="select-field">
