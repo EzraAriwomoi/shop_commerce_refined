@@ -11,6 +11,7 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
   const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -20,6 +21,7 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -47,6 +49,8 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
     } catch (error) {
       console.error('Error registering user:', error);
       setError('Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,6 +64,13 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
   return (
     <div className="sign-in-overlay" onClick={(e) => e.target === e.currentTarget && handleCloseClick()}>
       <div className={`customer-sign-in-component ${isVisible ? 'drop-down' : ''}`}>
+        {loading && (
+          <div className="progress-bar">
+            <div className="loader">
+              <div className="loaderBar"></div>
+            </div>
+          </div>
+        )}
         <div className="csc-heading">
           <h1>Register</h1>
           <button className="close-btn" onClick={handleCloseClick}>

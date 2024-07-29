@@ -9,6 +9,7 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch('http://127.0.0.1:5000/auth/signin', {
         method: 'POST',
@@ -41,6 +43,8 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
     } catch (error) {
       setError('An error occurred. Please try again.');
       console.error('Error during sign-in:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,6 +58,13 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
   return (
     <div className="sign-in-overlay" onClick={(e) => e.target === e.currentTarget && handleCloseClick()}>
       <div className={`customer-sign-in-component ${isVisible ? 'drop-down' : ''}`}>
+        {loading && (
+          <div className="progress-bar">
+            <div className="loader">
+              <div className="loaderBar"></div>
+            </div>
+          </div>
+        )}
         <div className="csc-heading">
           <h1>Sign In</h1>
           <button className="close-btn" onClick={handleCloseClick}>

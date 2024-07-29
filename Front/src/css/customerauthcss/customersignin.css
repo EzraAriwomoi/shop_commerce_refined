@@ -169,3 +169,57 @@
   width: 24px;
   height: 24px;
 }
+
+.loader {
+  width: 100%;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  border: 4px solid transparent;
+  overflow: hidden;
+}
+
+.loader:before {
+  border: 1px solid #8b4513;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.loader .loaderBar {
+  position: absolute;
+  border-radius: 10px;
+  top: 0;
+  left: -100%;
+  bottom: 0;
+  background: #8b4513;
+  width: 100%;
+  animation: borealisBar 1s linear infinite;
+}
+
+@keyframes borealisBar {
+  0% {
+    left: -100%;
+    width: 100%;
+  }
+  50% {
+    left: 0;
+    width: 100%;
+  }
+  100% {
+    left: 100%;
+    width: 100%;
+  }
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}

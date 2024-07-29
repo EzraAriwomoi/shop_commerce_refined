@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaBell, FaUser, FaBars } from "react-icons/fa";
 import CustomerAuthComponent from "../customerauthcomponents/CustomerAuthComponent";
 import "../../css/layoutcss/layout.css";
@@ -40,14 +40,13 @@ const Navbar = () => {
         navigate('/');
         window.location.reload();
         setIsAuthenticated(false);
-      // setIsAuthenticated(false);
-    } else {
-      const data = await response.json();
-      alert('Error: ' + data.error);
+      } else {
+        const data = await response.json();
+        alert('Error: ' + data.error);
+      }
+    } catch (error) {
+      alert('Logout failed: ' + error.message);
     }
-  } catch (error) {
-    alert('Logout failed: ' + error.message);
-  }
   };
 
   const handleSignInClick = () => {
@@ -171,15 +170,19 @@ const Navbar = () => {
             </button>
             {profileOpen && (
               <div className="dropdown-content">
-                <Link to="/myaccount">My Profile</Link>
+                <Link to="/myaccount">Profile</Link>
                 {isAuthenticated ? (
                   <>
-                    <Link to="/orders">My Orders</Link>
+                    <Link to="/orders">Orders</Link>
                     <Link to="/settings">Settings</Link>
+                    <div className="dropdown-divider"></div>
                     <a href="#" onClick={handleSignOut}>Logout</a>
                   </>
                 ) : (
-                  <a className="signin-button" href="#" onClick={handleSignInClick}>Sign in</a>
+                  <>
+                  <div className="dropdown-divider"></div>
+                  <a href="#" onClick={handleSignInClick}>Sign in</a>
+                  </>
                 )}
               </div>
             )}
@@ -194,9 +197,9 @@ const Navbar = () => {
 
 const NotificationMenu = () => {
   const [notifications, setNotifications] = useState([
-    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
-    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
-    { productName: "Ring", prodcutId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
+    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
+    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
+    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
   ]);
 
   return (
