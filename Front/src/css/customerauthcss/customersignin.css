@@ -76,6 +76,7 @@
   text-decoration: none;
   margin-bottom: 20px;
   font-size: 0.9rem;
+  cursor: pointer;
 }
 
 .forgot-password:hover {

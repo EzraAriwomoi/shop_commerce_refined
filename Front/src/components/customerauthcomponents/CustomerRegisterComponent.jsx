@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../css/customerauthcss/customersignin.css";
 
 // eslint-disable-next-line react/prop-types
@@ -12,7 +12,6 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
   const [error, setError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
 
-  // eslint-disable-next-line no-undef
   useEffect(() => {
     setTimeout(() => {
       setIsVisible(true);

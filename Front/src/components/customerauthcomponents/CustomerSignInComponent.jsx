@@ -84,7 +84,7 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
               required
             />
           </div>
-          <a href="#" onClick={() => onChangeView('reset-password')} className="forgot-password">Forgot Password?</a>
+          <span onClick={() => onChangeView('reset-password')} className="forgot-password">Forgot Password?</span>
           {error && <p className="error-message">{error}</p>}
           <div className="csc-buttons flex">
             <button type="submit">Sign In</button>
