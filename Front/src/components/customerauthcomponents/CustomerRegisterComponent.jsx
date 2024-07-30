@@ -6,7 +6,7 @@ import "../../css/customerauthcss/customersignin.css";
 const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirm_password, setConfirmPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
@@ -22,10 +22,14 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (password !== confirmPassword) {
+    setError(''); // Clear any previous errors
+  
+    if (password !== confirm_password) {
       setError('Passwords do not match.');
+      setLoading(false);
       return;
     }
+  
     try {
       const response = await fetch('http://127.0.0.1:5000/auth/signup', {
         method: 'POST',
@@ -35,24 +39,32 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
         body: JSON.stringify({
           full_name: `${firstName} ${lastName}`,
           email,
-          password
+          password,
+          confirm_password
         }),
       });
+  
       const data = await response.json();
+  
+      // Check if response is not ok and throw an error if it isn't
       if (!response.ok) {
         throw new Error(data.error || 'Registration failed');
       }
-
+  
+      // Display success message
       alert(data.message); // Replace with your preferred UI notification
-      onChangeView('sign-in'); // Return to sign-in view after successful registration
-
+  
+      // Redirect to sign-in view after successful registration
+      onChangeView('sign-in');
+  
     } catch (error) {
       console.error('Error registering user:', error);
-      setError('Registration failed');
+      setError(error.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleCloseClick = () => {
     setIsVisible(false);
@@ -126,7 +138,7 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
             <input
               type="password"
               placeholder="Confirm your password"
-              value={confirmPassword}
+              value={confirm_password}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />

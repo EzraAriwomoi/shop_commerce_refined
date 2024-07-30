@@ -1,7 +1,7 @@
 import uuid
 from flask import Blueprint, Flask, current_app, request, jsonify
 from flask_jwt_extended import jwt_required
-from app.models import FeaturedProduct, Product
+from app.models import FeaturedProduct, Product, Category
 from app.extensions import db, firebase_storage,csrf
 from flask_cors import CORS
 from flask_cors import cross_origin
@@ -9,17 +9,25 @@ from datetime import datetime
 from firebase_admin import credentials, storage
 
 app = Flask(__name__)
-CORS(app)
 products_bp = Blueprint('products', __name__)
-
+CORS(products_bp, resources={r"/*"})
 
 @products_bp.route('/', methods=['GET'])
 @cross_origin()
 @csrf.exempt
 def get_products():
     try:
-        products = Product.query.all()
-        # print("Products fetched from database:", products)  # Debug statement
+        # Get the category query parameter from the request
+        category = request.args.get('category')
+
+        if category:
+            # Filter products by category
+            products = Product.query.filter(Product.categories.any(name=category)).all()
+        else:
+            # Get all products if no category is specified
+            products = Product.query.all()
+
+        # Process the products into a list of dictionaries
         result = []
         for product in products:
             result.append({
@@ -32,11 +40,10 @@ def get_products():
                 'created_at': product.created_at.isoformat(),
                 'categories': [category.name for category in product.categories]
             })
-        # print("Processed product data:", result)  # Debug statement
+
         return jsonify(result), 200
     except Exception as e:
-        # print("Error fetching products:", str(e))  # Debug statement
-        return jsonify({'error': 'Error fetching products'}), 500
+        return jsonify({'error': 'Error fetching products', 'message': str(e)}), 500
 
 @products_bp.route('/products/<int:id>', methods=['GET'])
 @cross_origin()
@@ -148,3 +155,8 @@ def delete_product(id):
     db.session.commit()
 
     return jsonify({'message': 'Product deleted successfully'}), 200
+
+@products_bp.route('/categories', methods=['GET'])
+def get_categories():
+    categories = Category.query.all()
+    return jsonify([category.to_dict() for category in categories])

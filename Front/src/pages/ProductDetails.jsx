@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import NavBar from "../components/layout/NavBar";
 import Footer from "../components/layout/Footer";
+import NavBar from "../components/layout/NavBar";
+import RelatedProducts from "../components/productdetails/RelatedProducts";
 import "../css/productdetails/productdetails.css";
 
 const ProductDetails = () => {
@@ -154,10 +155,12 @@ const ProductDetails = () => {
                         <img src={product.image_url} alt={product.name} />
                     </section>
                     <section className="pd-details">
-                        <h1>{product.name}</h1>
-                        <h2>
-                            PRICE: <span>Kes {product.price}</span>
-                        </h2>
+                        <div className="pdd-titles">
+                            <h1>{product.name}</h1>
+                            <h2>
+                                PRICE: <span>Kes {product.price}</span>
+                            </h2>
+                        </div>
                         <p>
                             {product.description}
                         </p>
@@ -185,6 +188,7 @@ const ProductDetails = () => {
                         </div>
                     </section>
                 </div>
+                <RelatedProducts productId={id} />
             </div>
             <Footer />
         </>

@@ -10,10 +10,14 @@ from app.utils.validation import validate_email, validate_password
 from app.utils.token import token_required, generate_token, validate_input, verify_token
 from flask_cors import CORS, cross_origin
 from flask_mail import Message
+import logging
 
 app = Flask(__name__)
 auth_bp = Blueprint('auth', __name__)
 CORS(auth_bp, resources={r"/*"})
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 @auth_bp.route('/signup', methods=['POST'])
 @cross_origin()

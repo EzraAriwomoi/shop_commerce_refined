@@ -1,18 +1,30 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../../css/myaccount/myaccount.css";
 import MyAccount from "./subcomponents/myaccount";
 import OrderHistory from "./subcomponents/orderhistory";
 import SavedItems from "./subcomponents/wishlist";
 import NavBar from "../../components/layout/NavBar";
-// import Footer from "../../components/layout/Footer";
 
 export default function MainAccount() {
   const [isMobileMenuOpen] = useState(true);
   const [activeComponent, setActiveComponent] = useState("orderhistory");
   const [userDetails, setUserDetails] = useState({ full_name: "Username", email: "youremail@gmail.com" });
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Set active component based on URL path
+    const path = location.pathname;
+    if (path.includes("/orders")) {
+      setActiveComponent("orderhistory");
+    } else if (path.includes("/myaccount")) {
+      setActiveComponent("myaccount");
+    } else if (path.includes("/wishlist")) {
+      setActiveComponent("wishlist");
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     // Fetch user profile details on component mount
@@ -114,18 +126,6 @@ export default function MainAccount() {
         {/* Main content container */}
         <div className="component-container">
           <div className="component-inner-container">
-            {/* <div className="component-header">
-              <div className="component-header-content">
-                <header className="header-sum-info">
-                  <a className="edit-summary-information" href="">
-                    <svg className="svg-back-info" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                      <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-                    </svg>
-                  </a>
-                  <h2 className="header-infopage-h2">Account Information</h2>
-                </header>
-              </div>
-            </div> */}
             <div className="component-body">
               {activeComponent === "orderhistory" && <OrderHistory />}
               {activeComponent === "myaccount" && <MyAccount />}
@@ -134,7 +134,6 @@ export default function MainAccount() {
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
     </div>
   );
 }
@@ -214,20 +213,3 @@ function LogOutIcon(props) {
     </svg>
   );
 }
-
-
-// function MenuIcon(props) {
-//   return (
-//     <svg
-//       {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       viewBox="0 0 24 24"
-//       stroke="#d9d9d9"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//     >
-//       <path d="M3 12h18M3 6h18M3 18h18" />
-//     </svg>
-//   );
-// }

@@ -55,7 +55,14 @@ const Navbar = () => {
   };
 
   const handleCartClick = () => {
-    window.location.href = "/shoppingcart";
+    navigate("/shoppingcart");
+  };
+
+  const handleProfileClick = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      handleSignInClick();
+    }
   };
 
   const closeSignInModal = () => {
@@ -69,9 +76,7 @@ const Navbar = () => {
 
       try {
         const response = await axios.get('http://127.0.0.1:5000/auth/status', {
-          method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
         });
@@ -85,14 +90,10 @@ const Navbar = () => {
     checkAuthStatus();
 
     const handleClickOutside = (event) => {
-      if (
-        profileRef.current && !profileRef.current.contains(event.target)
-      ) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
       }
-      if (
-        notificationsRef.current && !notificationsRef.current.contains(event.target)
-      ) {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
         setNotificationsOpen(false);
       }
     };
@@ -106,9 +107,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <a href="/">
+        <Link to="/">
           <h3>KLETOS</h3>
-        </a>
+        </Link>
       </div>
 
       <div className="mobile-view">
@@ -131,12 +132,31 @@ const Navbar = () => {
       </div>
 
       <div className={`navbar-content ${mobileMenuOpen ? "active" : ""}`}>
-        <ul className="navbar-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/products">Products</a></li>
-          <li><a href="/aboutus">About</a></li>
-          <li><a href="/contactus">Contact</a></li>
-        </ul>
+        {mobileMenuOpen ? (
+          <div className="dropdown-content-mobileview">
+            <Link className="link-to" onClick={handleProfileClick} to="/myaccount">Profile</Link>
+            {isAuthenticated ? (
+              <>
+                <Link className="link-to" to="/myaccount">Orders</Link>
+                <Link className="link-to" to="/settings">Settings</Link>
+                <div className="dropdown-divider-mobile"></div>
+                <a href="#" onClick={handleSignOut}>Logout</a>
+              </>
+            ) : (
+              <>
+                <div className="dropdown-divider-mobile"></div>
+                <a href="#" onClick={handleSignInClick}>Sign in</a>
+              </>
+            )}
+          </div>
+        ) : (
+          <ul className="navbar-links">
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/products">Products</Link></li>
+            <li><Link to="/aboutus">About</Link></li>
+            <li><Link to="/contactus">Contact</Link></li>
+          </ul>
+        )}
         <div className="navbar-icons">
           <div className="dropdown">
             <button
@@ -148,12 +168,11 @@ const Navbar = () => {
           </div>
           <div className="dropdown" ref={notificationsRef}>
             <button
-              onClick={() => setNotificationOpen(!notificationOpen)}
+              onClick={() => setNotificationsOpen(!notificationsOpen)}
               className="icon-button"
             >
               <FaBell />
             </button>
-            {notificationOpen && <NotificationMenu />}
             {notificationsOpen && (
               <div className="dropdown-content">
                 <Link to="/notifications">All Notifications</Link>
@@ -170,18 +189,18 @@ const Navbar = () => {
             </button>
             {profileOpen && (
               <div className="dropdown-content">
-                <Link to="/myaccount">Profile</Link>
+                <Link onClick={handleProfileClick} to="/myaccount">Profile</Link>
                 {isAuthenticated ? (
                   <>
-                    <Link to="/orders">Orders</Link>
+                    <Link to="/myaccount">Orders</Link>
                     <Link to="/settings">Settings</Link>
                     <div className="dropdown-divider"></div>
                     <a href="#" onClick={handleSignOut}>Logout</a>
                   </>
                 ) : (
                   <>
-                  <div className="dropdown-divider"></div>
-                  <a href="#" onClick={handleSignInClick}>Sign in</a>
+                    <div className="dropdown-divider"></div>
+                    <a href="#" onClick={handleSignInClick}>Sign in</a>
                   </>
                 )}
               </div>
@@ -205,14 +224,14 @@ const NotificationMenu = () => {
   return (
     <div className="notification-menu">
       <ul className="notf-cont">
-        {notifications.map((a, index) => (
+        {notifications.map((notification, index) => (
           <a href="#" className="notf-box" key={index}>
             <div className="nb-image">
-              <img src={a.imageSrc} alt={a.productName} />
+              <img src={notification.imageSrc} alt={notification.productName} />
             </div>
             <div className="nb-details">
-              <h3>{a.productName}</h3>
-              <p>{a.timeStamp}</p>
+              <h3>{notification.productName}</h3>
+              <p>{notification.timeStamp}</p>
             </div>
           </a>
         ))}

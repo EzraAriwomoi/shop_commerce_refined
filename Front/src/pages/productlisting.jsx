@@ -1,37 +1,43 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
-// import { Link } from "react-router-dom";
-import ProductCard from "../pages/components/productcard/productcard";
-import { Frame } from "../pages/components/frame";
-import { Frame2 } from "../pages/components/frame";
+import { useLocation } from "react-router-dom";
 import "../css/productlistingcss/productlisting.css";
-import NavBar from "../components/layout/NavBar";
 import Footer from "../components/layout/Footer";
-import Component from "../components/slide";
+import Navbar from "../components/layout/NavBar";
+import PLPCont from "../components/productlisting/PLPCont";
 
 const ProductListing = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/products/')
-            .then(response => {
+        const searchParams = new URLSearchParams(location.search);
+        const category = searchParams.get('category');
+
+        let url = 'http://127.0.0.1:5000/products/';
+        if (category) {
+            url += `?category=${category}`;
+        }
+
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
+                const data = await response.json();
                 setProducts(data);
-                setLoading(false);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching products:', error);
                 setError(error);
+            } finally {
                 setLoading(false);
-            });
-    }, []);
+            }
+        };
+
+        fetchProducts();
+    }, [location.search]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -41,34 +47,38 @@ const ProductListing = () => {
         return <div>Error: {error.message}</div>;
     }
 
+    const categoryName = new URLSearchParams(location.search).get('category') || 'Products';
+
     return (
         <>
-            <NavBar />
-            <div className="product-list-page">
-                <div className="div-2">
-                    <div>
-                        <Frame className="" />
-                        <Frame2 className="" />
+            <div>
+                <Navbar />
+                <div className="product-listing-page">
+                    <div className="plp-header">
+                        <h3>{categoryName}</h3>
+                        <ul>
+                            <button>Newest</button>
+                            <button>Popular</button>
+                        </ul>
                     </div>
-                    <div className="divider1"></div>
-                    <div className="frame-2">
-                        {products.map(product => (
-                            <ProductCard
-                                key={product.id}
-                                productId={product.id}
-                                productName={product.name}
-                                price={product.price}
-                                imageUrl={product.image_url}
-                            />
-                        ))}
-                    </div>
-                    {/* Component integration */}
-                    <div className="frame-5">
-                        <Component />
+                    <div className="plp-div">
+                        {products.length > 0 ? (
+                            products.map((product) => (
+                                <PLPCont
+                                    key={product.id}
+                                    productId={product.id}
+                                    productName={product.name}
+                                    price={product.price}
+                                    imageUrl={product.image_url}
+                                />
+                            ))
+                        ) : (
+                            <p>No products available in this category.</p>
+                        )}
                     </div>
                 </div>
+                <Footer />
             </div>
-            <Footer />
         </>
     );
 };

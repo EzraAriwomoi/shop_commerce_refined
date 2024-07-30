@@ -7,7 +7,7 @@ from app.models import (
     SupportTicket, WishlistItem, PaymentMethod, ShippingMethod,
     FAQ, ContactQuery, Banner, FeaturedProduct
 )
-from app import create_app, db  # Replace 'your_app' with the actual name of your app
+from app import create_app, db
 
 app = create_app()
 
