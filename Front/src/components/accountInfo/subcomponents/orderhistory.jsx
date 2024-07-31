@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import "../../../css/myaccount/orderhistory.css";
@@ -50,7 +49,9 @@ export default function OrderHistory() {
       if (response.status !== 200) {
         throw new Error("Failed to fetch orders");
       }
-      setOrders(response.data);
+      // Sort orders by created_at date in descending order
+      const sortedOrders = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setOrders(sortedOrders);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
@@ -59,19 +60,19 @@ export default function OrderHistory() {
   return (
     <div className="order-table-summary">
       {orders.length > 0 && (
-      <h2 className="header-order-hist">Order History</h2>
-    )}
+        <h2 className="header-order-hist">Order History</h2>
+      )}
       {orders.length === 0 ? (
-       <div className="displayed-no-order">
-        <div className="pan-effect">
+        <div className="displayed-no-order">
+          <div className="pan-effect">
             <img
               src="no-orders.jpg"
               alt="No orders placed"
               className="empty-order-image"
             />
           </div>
-        <p>You have placed no orders yet!</p>
-       </div>
+          <p>You have placed no orders yet!</p>
+        </div>
       ) : (
         orders.map((order) => (
           <div key={order.id} className="order-history-item">

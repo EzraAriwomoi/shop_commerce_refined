@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 export default function Checkout() {
     const [cartItems, setCartItems] = useState([]);
+    const [mpesaPhoneNumber, setMpesaPhoneNumber] = useState("");
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("creditCard");
     const navigate = useNavigate(); // Initialize navigate for redirection
 
@@ -57,32 +59,58 @@ export default function Checkout() {
     };
 
     const handlePlaceOrder = async () => {
-        try {
-            const token = localStorage.getItem("token");
-            const orderData = {
-                total_price: calculateTotal(),
-                status: 'Pending',
-                created_at: new Date().toISOString(),
-            };
-            
-            // Place order
-            const response = await axios.post("http://localhost:5000/orders/", orderData, {
+    try {
+        const token = localStorage.getItem("token");
+        const orderData = {
+            total_price: calculateTotal(),
+            payment_method: selectedPaymentMethod,
+            mpesa_phone_number: selectedPaymentMethod === "mpesa" ? mpesaPhoneNumber : null, // Include phone number if M-PESA is selected
+            status: 'Pending',
+            created_at: new Date().toISOString(),
+        };
+
+        console.log("Order data being sent:", orderData); // Log the order data
+
+        // Place order
+        const response = await axios.post("http://localhost:5000/orders/", orderData, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        // Extract order ID from response
+        const orderId = response.data.order_id; // Ensure this matches your backend response
+
+        if (selectedPaymentMethod === "mpesa") {
+            // Send payment request to M-PESA endpoint
+            const mpesaResponse = await axios.post("http://127.0.0.1:5000/mpesa/online/lipa", {
+                order_id: orderId,
+                phone_number: mpesaPhoneNumber,
+                amount: calculateTotal(),
+            }, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
-            // Extract order ID from response
-            const orderId = response.data.order_id; // Ensure this matches your backend response
-    
+
+            // Handle M-PESA response
+            if (mpesaResponse.status === 200) {
+                // Payment initiated successfully
+                alert('Payment initiated successfully with M-PESA!');
+            } else {
+                // Handle errors or unsuccessful payment initiation
+                alert('Failed to initiate M-PESA payment');
+            }
+        } else {
             // Prepare order items
             const orderItems = cartItems.map(item => ({
                 order_id: orderId,
                 product_id: item.product_id,
                 quantity: item.quantity,
             }));
-    
+
             // Save order items
             await axios.post("http://localhost:5000/orders/items", orderItems, {
                 headers: {
@@ -90,19 +118,22 @@ export default function Checkout() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
+
             // Clear the cart
             clearCart();
-    
+
             // Redirect to the order history page
             navigate('/myaccount');
-    
+
             alert('Order placed successfully!');
-        } catch (error) {
-            console.error("Error placing order:", error);
-            alert('Failed to place order');
         }
-    };
+    } catch (error) {
+        console.error("Error placing order:", error.response?.data || error.message);
+        alert('Failed to place order');
+    }
+};
+
+    
 
     return (
         <>
@@ -220,7 +251,17 @@ export default function Checkout() {
                                                                         <p className="mpesa-description">You will be prompted with a pop-up window to enter your M-PESA pin once you place the order.</p>
                                                                     </div>
                                                                     <div className="payment-field">
-                                                                        <input type="phone" placeholder="Enter your m-pesa number" className="field-input"></input>
+                                                                        <input 
+                                                                        type="text" 
+                                                                        value={mpesaPhoneNumber}
+                                                                        onChange={(e) => {
+                                                                            setMpesaPhoneNumber(e.target.value);
+                                                                            // console.log("M-PESA phone number updated:", e.target.value); // Debugging statement
+                                                                        }}
+                                                                        placeholder="Enter your m-pesa number" 
+                                                                        className="field-input">
+                                                                        {/* disabled={selectedPaymentMethod !== "mpesa"} */}
+                                                                        </input>
                                                                     </div>
                                                                 </div>
                                                             </div>

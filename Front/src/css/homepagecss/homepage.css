@@ -186,7 +186,7 @@
   position: relative;
 }
 
-.home-video > img {
+.home-video > source {
   width: full;
   height: full;
 }

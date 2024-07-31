@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaBell, FaUser, FaBars } from "react-icons/fa";
@@ -5,18 +6,55 @@ import CustomerAuthComponent from "../customerauthcomponents/CustomerAuthCompone
 import "../../css/layoutcss/layout.css";
 import axios from 'axios';
 
+const NOTIFICATIONS_API_URL = "http://127.0.0.1:5000/notifications/";
+
 const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
   const [isSignInVisible, setIsSignInVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [noNotifications, setNoNotifications] = useState(false);
   const navigate = useNavigate();
 
   const profileRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  useEffect(() => {
+    // Function to fetch notifications
+    const fetchNotifications = async () => {
+      try {
+        // Get token from local storage
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        // Fetch notifications from the backend
+        const response = await axios.get(NOTIFICATIONS_API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 204) {
+          setNoNotifications(true);
+          setNotifications([]);  // Clear notifications if none are available
+        } else {
+          setNotifications(response.data);
+          setNoNotifications(false);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications", error);
+      }
+    };
+
+    fetchNotifications();
+  }, [isSignInVisible]);
+
+  const handleNotificationsClick = () => {
+    setNotificationsOpen(!notificationsOpen);
+  };
 
   const toggleDropdown = (setter) => {
     setter((prev) => !prev);
@@ -115,10 +153,10 @@ const Navbar = () => {
       <div className="mobile-view">
         <div
           className="mobile-bell-icon"
-          onClick={() => setNotificationOpen(!notificationOpen)}
+          onClick={handleNotificationsClick}
         >
           <FaBell />
-          {notificationOpen && <NotificationMenu />}
+          {notificationsOpen && <NotificationMenu notifications={notifications} noNotifications={noNotifications} />}
         </div>
         <div className="mobile-cart-icon" onClick={handleCartClick}>
           <FaShoppingCart />
@@ -168,17 +206,12 @@ const Navbar = () => {
           </div>
           <div className="dropdown" ref={notificationsRef}>
             <button
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
+              onClick={handleNotificationsClick}
               className="icon-button"
             >
               <FaBell />
             </button>
-            {notificationsOpen && (
-              <div className="dropdown-content">
-                <Link to="/notifications">All Notifications</Link>
-                <a href="#">Mark All as Read</a>
-              </div>
-            )}
+            {notificationsOpen && <NotificationMenu notifications={notifications} noNotifications={noNotifications} />}
           </div>
           <div className="dropdown" ref={profileRef}>
             <button
@@ -214,24 +247,24 @@ const Navbar = () => {
   );
 };
 
-const NotificationMenu = () => {
-  const [notifications, setNotifications] = useState([
-    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
-    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
-    { productName: "Ring", productId: 1, timeStamp: "12am", imageSrc: "/ring.jpeg" },
-  ]);
+const NotificationMenu = ({ notifications, noNotifications }) => {
+  if (noNotifications) {
+    return (
+      <div className="notification-menu">
+        <p>No notifications available</p>
+      </div>
+    );
+  }
 
   return (
     <div className="notification-menu">
       <ul className="notf-cont">
-        {notifications.map((notification, index) => (
-          <a href="#" className="notf-box" key={index}>
-            <div className="nb-image">
-              <img src={notification.imageSrc} alt={notification.productName} />
-            </div>
+        {notifications.map((notification) => (
+          <a href="#" className="notf-box" key={notification.id}>
             <div className="nb-details">
-              <h3>{notification.productName}</h3>
-              <p>{notification.timeStamp}</p>
+              <h3>{notification.title}</h3>
+              <p>{notification.message}</p>
+              <p><small>{new Date(notification.created_at).toLocaleString()}</small></p>
             </div>
           </a>
         ))}

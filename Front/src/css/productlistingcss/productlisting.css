@@ -116,13 +116,13 @@
   flex: 0 0 40%;
   width: 100%;
   display: flex;
-  justify-content: center;
+  padding-left: .4em;
   align-items: center;
 }
 
-.plpcd-btn > button {
+.addcart {
   height: 70%;
-  width: 90%;
+  width: 77%;
   font-size: 14px;
   border-radius: 5px;
   color: white;
@@ -131,9 +131,19 @@
   border: 0.3px solid #37373762;
 }
 
-.plpcd-btn > button:hover {
+.addcart:hover {
   background-color: var(--secondary-color);
   color: white;
+}
+
+.btn-heart-products{
+  margin-left: 5px;
+  width: 22%;
+  background-color: transparent;
+}
+
+.btn-heart-products >svg:hover{
+  fill: #8b4513;
 }
 
 @media (max-width: 600px) {
@@ -149,7 +159,6 @@
 
   .plp-cont {
     flex: 0 0 48%;
-    height: 270px;
   }
 
   .plpc-image-img{

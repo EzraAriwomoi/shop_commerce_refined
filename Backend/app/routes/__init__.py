@@ -10,6 +10,7 @@ from .miscellaneous import misc_bp
 from .payments import payment_bp, shipping_bp
 from .support import support_bp
 from .wishlist import wishlist_bp
+from .mpesa import mpesa_bp
 
 def register_routes(app):
     app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -24,6 +25,4 @@ def register_routes(app):
     app.register_blueprint(payment_bp, url_prefix='/pay')
     app.register_blueprint(shipping_bp, url_prefix='/ship')
     app.register_blueprint(wishlist_bp, url_prefix='/wishlist')
-    
-   
-   
+    app.register_blueprint(mpesa_bp, url_prefix='/mpesa')

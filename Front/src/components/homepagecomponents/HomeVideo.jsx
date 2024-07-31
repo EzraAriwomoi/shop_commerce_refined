@@ -3,7 +3,7 @@ import "../../css/homepagecss/homepage.css";
 const HomeVideo = () => {
   return (
     <div className="home-video">
-      <video autoPlay width="600" className="hv-video">
+      <video autoPlay loop muted width="600" className="hv-video">
         <source src={"/videos/homepage_vid.mp4"} type={"video/mp4"} />
         Your browser does not support the video tag.
       </video>
