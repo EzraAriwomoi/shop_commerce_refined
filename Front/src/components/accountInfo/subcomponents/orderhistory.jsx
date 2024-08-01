@@ -2,35 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import "../../../css/myaccount/orderhistory.css";
 
-function OrderItem({ item }) {
-  return (
-    <div className="order-item">
-      <img src={item.image_url} alt={`Image of ${item.product_name}`} className="order-item-image" />
-      <div className="order-item-details">
-        <span className="order-item-name">{item.product_name}</span>
-        <span className="order-item-qty">{`x${item.quantity}`}</span>
-        <span className="order-item-price">{`Kes. ${item.price}`}</span>
-      </div>
-    </div>
-  );
-}
-
-const getStatusColor = (status) => {
-  switch (status.toLowerCase()) {
-    case "delivered":
-      return "delivered";
-    case "processing":
-      return "processing";
-    case "cancelled":
-      return "cancelled";
-    case "pending":
-      return "pending";
-    default:
-      return "";
-  }
-};
-
-export default function OrderHistory() {
+const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -55,6 +27,37 @@ export default function OrderHistory() {
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Delivered":
+        return "Delivered";
+      case "Processing":
+        return "Processing"; // Waiting to be delivered
+      case "Cancelled":
+        return "Cancelled";
+      case "Pending":
+        return "Pending"; // Waiting for payment
+      default:
+        return "";
+    }
+  };
+
+  const OrderItem = ({ item, status }) => {
+    return (
+      <div className="order-item">
+        <img src={item.image_url} alt={`Image of ${item.product_name}`} className="order-item-image" />
+        <div className="order-item-details">
+          <span className="order-item-name">{item.product_name}</span>
+          <span className="order-item-qty">{`x${item.quantity}`}</span>
+          <span className="order-item-price">{`Kes. ${item.price}`}</span>
+        </div>
+        {status.toLowerCase() === "pending" && (
+          <button className="pay-now-HIST">Pay Now</button>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -85,7 +88,7 @@ export default function OrderHistory() {
               </div>
               <div className="order-items">
                 {order.items.map((item) => (
-                  <OrderItem key={item.product_id} item={item} />
+                  <OrderItem key={item.product_id} item={item} status={order.status} />
                 ))}
               </div>
             </div>
@@ -94,4 +97,6 @@ export default function OrderHistory() {
       )}
     </div>
   );
-}
+};
+
+export default OrderHistory;

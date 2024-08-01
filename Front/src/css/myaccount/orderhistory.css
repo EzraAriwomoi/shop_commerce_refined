@@ -49,22 +49,22 @@
   cursor: default;
 }
 
-.order-status.delivered {
+.order-status.Delivered {
   background-color: #34d399;
   color: white;
 }
 
-.order-status.processing {
+.order-status.Processing {
   background-color: #f59e0b;
   color: white;
 }
 
-.order-status.cancelled {
+.order-status.Cancelled {
   background-color: #ef4444;
   color: white;
 }
 
-.order-status.pending {
+.order-status.Pending {
   background-color: #3b82f6;
   color: white;
 }
@@ -74,20 +74,28 @@
 }
 
 .order-item {
+  position: relative;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #ddd;
-  padding: 10px 0;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
 }
 
 .order-item-image {
-  height: 60px;
-  width: 60px;
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
   object-fit: cover;
-  margin-right: 10px;
+  display: block;
 }
 
 .order-item-details {
+  margin-bottom: 10px;
+  padding-left: 2em;
+  gap: .4em;
   display: flex;
   flex-direction: column;
 }
@@ -96,9 +104,12 @@
   font-weight: bold;
 }
 
-.order-item-qty,
-.order-item-price {
+.order-item-qty {
   color: #555;
+}
+
+.order-item-price{
+  color: green;
 }
 
 .displayed-no-order {
@@ -125,4 +136,20 @@
   color: #a7a6a6;
   font-size: 16px;
   margin: 0;
+}
+
+.pay-now-HIST {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pay-now-HIST:hover {
+  background-color: #0056b3;
 }

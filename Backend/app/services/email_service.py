@@ -3,15 +3,20 @@ from flask_mail import Message
 from app.extensions import mail
 
 def send_password_reset_email(user_email, token):
-    reset_url = url_for('auth.password_reset', token=token, _external=True)
+    # Construct the frontend URL for password reset
+    reset_url = f"http://localhost:3000/password-reset?token={token}"
+    
+    # Create the email message
     msg = Message('Password Reset Request', sender='noreply@example.com', recipients=[user_email])
-    msg.body = f'To reset your password, visit the following link:\n {reset_url}'
+    msg.body = f'To reset your password, visit the following link:\n{reset_url}'
+    
     try:
+        # Send the email
         mail.send(msg)
         print(f'Password reset email sent to {user_email} with token: {token}')
     except Exception as e:
         print(f'Failed to send password reset email: {str(e)}')
-
+        
 def send_login_alert_email(user_email, token):
     block_url = url_for('auth.block_account', token=token, _external=True)
     msg = Message('Login Alert', sender='noreply@example.com', recipients=[user_email])

@@ -17,7 +17,7 @@ const ResetPasswordComponent = ({ onClose, onChangeView }) => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:5000/auth/password-reset', {
+      const response = await fetch('http://127.0.0.1:5000/auth/request-password-reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,15 +26,15 @@ const ResetPasswordComponent = ({ onClose, onChangeView }) => {
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Reset password failed');
+        throw new Error(data.error || 'Request password reset failed');
       }
 
       alert(data.message); // Replace with your preferred UI notification
-      onChangeView('sign-in'); // Return to sign-in view after successful reset password request
+      onChangeView('password-reset-form', { token: data.token }); // Pass the token to the reset form view
 
     } catch (error) {
-      console.error('Error resetting password:', error);
-      setError('Reset password failed');
+      console.error('Error requesting password reset:', error);
+      setError('Request password reset failed');
     }
   };
 

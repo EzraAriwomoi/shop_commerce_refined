@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../css/productlistingcss/productlisting.css";
@@ -20,6 +21,13 @@ const ProductListing = () => {
             url += `?category=${category}`;
         }
 
+        const shuffleArray = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        };
+
         const fetchProducts = async () => {
             try {
                 const response = await fetch(url);
@@ -27,6 +35,7 @@ const ProductListing = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
+                shuffleArray(data); // Shuffle the array before setting the state
                 setProducts(data);
             } catch (error) {
                 console.error('Error fetching products:', error);

@@ -151,7 +151,7 @@ def request_password_reset():
         return jsonify({'error': 'User not found'}), 404
 
     token = generate_token(user.id)
-    reset_url = url_for('auth.password_reset', token=token, _external=True)
+    reset_url = url_for('auth.password_reset_form', token=token, _external=True)
     body_template = f'\n\nClick to Reset Password:\n{reset_url}'
     body = body_template.format()
     send_email('Reset Your Password', [email], body, reset_url=reset_url)
@@ -159,7 +159,7 @@ def request_password_reset():
     return jsonify({
         'message': 'Password reset email sent',
         'token': token
-        }), 200
+    }), 200
 
 # @auth_bp.route('/reset-password/<token>', methods=['POST'])
 # def reset_password_with_url(token):
@@ -206,24 +206,19 @@ def forgot_password():
 @cross_origin()
 @csrf.exempt
 def password_reset():
-    if request.is_json:
-        data = request.get_json()
-    else:
-        data = request.form
-        
+    data = request.get_json()
+
     if not data:
         print("No JSON body received")
         return jsonify({'error': 'Invalid request, JSON body required'}), 400
-    
+
     token = data.get('token')
     new_password = data.get('new_password')
     print(f"Token received for password reset: {token}")  # Debug print statement
     print(f"New password received for password reset: {new_password}")  # Debug print statement
 
-    
     if not token or not new_password:
         return jsonify({'error': 'Token and new password are required'}), 400
-
 
     user_id = verify_token(token)
     if user_id is None:
@@ -290,4 +285,10 @@ def block_account(token):
 @token_required
 def refresh_token(current_user):
     token = generate_token(current_user.id)
+    return jsonify({'token': token}), 200
+
+@auth_bp.route('/password-reset-form/<token>', methods=['GET'])
+@cross_origin()
+@csrf.exempt
+def password_reset_form(token):
     return jsonify({'token': token}), 200

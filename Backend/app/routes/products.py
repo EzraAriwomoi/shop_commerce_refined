@@ -1,19 +1,16 @@
 import uuid
 from flask import Blueprint, Flask, current_app, request, jsonify
 from flask_jwt_extended import jwt_required
-from app.models import FeaturedProduct, Product, Category
-from app.extensions import db, firebase_storage,csrf
+from app.models import FeaturedProduct, Product, Category, product_category
+from app.extensions import db, firebase_storage, csrf
 from flask_cors import CORS
-from flask_cors import cross_origin
 from datetime import datetime
-from firebase_admin import credentials, storage
 
 app = Flask(__name__)
 products_bp = Blueprint('products', __name__)
-CORS(products_bp, resources={r"/*"})
+CORS(products_bp, resources={r"/*": {"origins": "*"}})
 
 @products_bp.route('/', methods=['GET'])
-@cross_origin()
 @csrf.exempt
 def get_products():
     try:
@@ -46,30 +43,28 @@ def get_products():
         return jsonify({'error': 'Error fetching products', 'message': str(e)}), 500
 
 @products_bp.route('/products/<int:id>', methods=['GET'])
-@cross_origin()
 @csrf.exempt
 def get_product(id):
-    # print(f"Fetching product with ID: {id}")
-    product = Product.query.get(id)
-    if not product:
-        # print("Product not found")
-        return jsonify({'error': 'Product not found'}), 404
-    
-    product_data = {
-        'id': product.id,
-        'name': product.name,
-        'description': product.description,
-        'price': product.price,
-        'stock': product.stock,
-        'image_url': product.image_url,
-        'created_at': product.created_at.isoformat(),
-        'categories': [category.name for category in product.categories]
-    }
-    # print(f"Returning product data: {product_data}")
-    return jsonify(product_data), 200
+    try:
+        product = Product.query.get(id)
+        if not product:
+            return jsonify({'error': 'Product not found'}), 404
+        
+        product_data = {
+            'id': product.id,
+            'name': product.name,
+            'description': product.description,
+            'price': product.price,
+            'stock': product.stock,
+            'image_url': product.image_url,
+            'created_at': product.created_at.isoformat(),
+            'categories': [category.name for category in product.categories]
+        }
+        return jsonify(product_data), 200
+    except Exception as e:
+        return jsonify({'error': 'Error fetching product', 'message': str(e)}), 500
 
 @products_bp.route('/products', methods=['POST'])
-@cross_origin()
 @csrf.exempt
 def create_product():
     data = request.form
@@ -82,30 +77,36 @@ def create_product():
         return jsonify({'error': 'No selected file'}), 400
 
     try:
+        # Validate and parse the data
+        name = data.get('name')
+        description = data.get('description')
+        price = data.get('price')
+        stock = data.get('stock')
+        is_featured = bool(data.get('is_featured', False))
+        featured_priority = int(data.get('featured_priority', 0))
+
+        if not name or not price or not stock:
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        price = float(price)
+        stock = int(stock)
+
         # Generate a unique filename and upload to Firebase Storage
         filename = f"{str(uuid.uuid4())}_{image.filename}"
-        blob = firebase_storage.blob(filename)
-
-        # Set content type explicitly (optional)
-        blob.content_type = 'image/jpeg'
-
-        # Upload the file
+        blob = firebase_storage.bucket.blob(filename)
+        blob.content_type = image.content_type
         blob.upload_from_file(image)
-
-        # Generate a signed URL with token for public access
-        # Token will remain valid based on Firebase Storage rules
         download_url = blob.generate_signed_url(datetime.max)
 
-        # Store the download URL with token in the database
         product = Product(
-            name=data.get('name'),
-            description=data.get('description'),
-            price=float(data.get('price')),
-            stock=int(data.get('stock')),
-            image_url=download_url,  # Store the generated download URL
+            name=name,
+            description=description,
+            price=price,
+            stock=stock,
+            image_url=download_url,
             created_at=datetime.utcnow(),
-            is_featured=bool(data.get('is_featured', False)),
-            featured_priority=int(data.get('featured_priority', 0))
+            is_featured=is_featured,
+            featured_priority=featured_priority
         )
 
         db.session.add(product)
@@ -113,50 +114,81 @@ def create_product():
 
         return jsonify({'message': 'Product created successfully', 'image_url': download_url}), 201
 
+    except ValueError as ve:
+        return jsonify({'error': 'Invalid data', 'message': str(ve)}), 400
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 500
-        
-    
+        return jsonify({'error': 'Internal server error', 'message': str(e)}), 500
+
 @products_bp.route('/<int:id>', methods=['PUT'])
-@cross_origin()
 @csrf.exempt
 @jwt_required()
 def update_product(id):
-    data = request.get_json()
-    product = Product.query.get(id)
+    try:
+        data = request.get_json()
+        product = Product.query.get(id)
 
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
+        if not product:
+            return jsonify({'error': 'Product not found'}), 404
 
-    product.name = data.get('name', product.name)
-    product.description = data.get('description', product.description)
-    product.price = data.get('price', product.price)
-    product.stock = data.get('stock', product.stock)
+        product.name = data.get('name', product.name)
+        product.description = data.get('description', product.description)
+        product.price = data.get('price', product.price)
+        product.stock = data.get('stock', product.stock)
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify({'message': 'Product updated successfully'}), 200
+        return jsonify({'message': 'Product updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal server error', 'message': str(e)}), 500
 
 @products_bp.route('/<int:id>', methods=['DELETE'])
-@cross_origin()
 @csrf.exempt
 @jwt_required()
 def delete_product(id):
-    product = Product.query.get(id)
+    try:
+        product = Product.query.get(id)
 
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
+        if not product:
+            return jsonify({'error': 'Product not found'}), 404
 
-    # Delete related featured_product entries
-    db.session.query(FeaturedProduct).filter_by(product_id=product.id).delete()
+        # Delete related featured_product entries
+        db.session.query(FeaturedProduct).filter_by(product_id=product.id).delete()
 
-    db.session.delete(product)
-    db.session.commit()
+        db.session.delete(product)
+        db.session.commit()
 
-    return jsonify({'message': 'Product deleted successfully'}), 200
+        return jsonify({'message': 'Product deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal server error', 'message': str(e)}), 500
 
 @products_bp.route('/categories', methods=['GET'])
 def get_categories():
-    categories = Category.query.all()
-    return jsonify([category.to_dict() for category in categories])
+    try:
+        categories = Category.query.all()
+        return jsonify([category.to_dict() for category in categories])
+    except Exception as e:
+        return jsonify({'error': 'Error fetching categories', 'message': str(e)}), 500
+
+@products_bp.route('/related', methods=['GET'])
+def get_related_products():
+    categories = request.args.get('categories')
+    if not categories:
+        return jsonify({'error': 'Categories parameter is required'}), 400
+
+    try:
+        category_ids = [int(c) for c in categories.split(',')]
+    except ValueError:
+        return jsonify({'error': 'Invalid category ID format'}), 400
+
+    # Fetch related products based on the provided categories
+    related_products = Product.query \
+        .join(product_category, Product.id == product_category.c.product_id) \
+        .join(Category, Category.id == product_category.c.category_id) \
+        .filter(Category.id.in_(category_ids)) \
+        .all()
+
+    # Convert related products to dictionary format
+    related_products_list = [p.to_dict() for p in related_products]
+
+    return jsonify(related_products_list)

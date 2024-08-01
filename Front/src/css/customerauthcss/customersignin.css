@@ -193,7 +193,7 @@
   top: 0;
   left: -100%;
   bottom: 0;
-  background: #8b4513;
+  background: #8b451391;
   width: 100%;
   animation: borealisBar 1s linear infinite;
 }
@@ -222,4 +222,27 @@
   justify-content: center;
   align-items: center;
   z-index: 10;
+}
+
+/* eye toggle */
+.csc-input-div {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 40px;
+}
+
+.eye-icon {
+  position: absolute;
+  fill: rgba(128, 128, 128, 0.705);
+  right: 10px;
+  top: 50%;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.eye-icon:hover{
+  fill: #8b451393;
 }

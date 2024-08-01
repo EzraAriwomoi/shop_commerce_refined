@@ -38,6 +38,8 @@ function App() {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/resetpassword" element={<ResetPasswordPage />} />
           <Route path="/myaccount" element={<MainAccount />} />
+          <Route path="/orders" element={<MainAccount />} />
+          <Route path="/wishlist" element={<MainAccount />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/checkout" element={<Checkout />} />

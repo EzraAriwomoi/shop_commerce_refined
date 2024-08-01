@@ -176,7 +176,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <>
                 <Link className="link-to" to="/myaccount">Orders</Link>
-                <Link className="link-to" to="/settings">Settings</Link>
+                <Link className="link-to" to="/wishlist">Wishlist</Link>
                 <div className="dropdown-divider-mobile"></div>
                 <a href="#" onClick={handleSignOut}>Logout</a>
               </>
@@ -225,8 +225,8 @@ const Navbar = () => {
                 <Link onClick={handleProfileClick} to="/myaccount">Profile</Link>
                 {isAuthenticated ? (
                   <>
-                    <Link to="/myaccount">Orders</Link>
-                    <Link to="/settings">Settings</Link>
+                    <Link to="/orders">Orders</Link>
+                    <Link to="/wishlist">Wishlist</Link>
                     <div className="dropdown-divider"></div>
                     <a href="#" onClick={handleSignOut}>Logout</a>
                   </>

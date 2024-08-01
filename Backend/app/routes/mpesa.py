@@ -9,7 +9,8 @@ from app.extensions import db
 
 app = Flask(__name__)
 mpesa_bp = Blueprint('mpesa', __name__)
-CORS(mpesa_bp, resources={r"/*"})
+CORS(mpesa_bp, resources={r"/*": {"origins": "*"}})
+app.config.from_object('config.Config')
 
 
 @mpesa_bp.route('/')
