@@ -252,6 +252,8 @@ class WishlistItem(db.Model):
             'user_id': self.user_id,
             'product_id': self.product_id,
             'created_at': self.created_at.isoformat(),
+            'product_name': self.product.name,
+            'product_price': self.product.price,
             'image_url': self.product.image_url 
         }
 

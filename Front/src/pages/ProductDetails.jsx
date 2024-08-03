@@ -188,7 +188,7 @@ const ProductDetails = () => {
                         </div>
                     </section>
                 </div>
-                <RelatedProducts productId={id} />
+                <RelatedProducts/>
             </div>
             <Footer />
         </>

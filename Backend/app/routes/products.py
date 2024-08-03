@@ -162,33 +162,3 @@ def delete_product(id):
     except Exception as e:
         return jsonify({'error': 'Internal server error', 'message': str(e)}), 500
 
-@products_bp.route('/categories', methods=['GET'])
-def get_categories():
-    try:
-        categories = Category.query.all()
-        return jsonify([category.to_dict() for category in categories])
-    except Exception as e:
-        return jsonify({'error': 'Error fetching categories', 'message': str(e)}), 500
-
-@products_bp.route('/related', methods=['GET'])
-def get_related_products():
-    categories = request.args.get('categories')
-    if not categories:
-        return jsonify({'error': 'Categories parameter is required'}), 400
-
-    try:
-        category_ids = [int(c) for c in categories.split(',')]
-    except ValueError:
-        return jsonify({'error': 'Invalid category ID format'}), 400
-
-    # Fetch related products based on the provided categories
-    related_products = Product.query \
-        .join(product_category, Product.id == product_category.c.product_id) \
-        .join(Category, Category.id == product_category.c.category_id) \
-        .filter(Category.id.in_(category_ids)) \
-        .all()
-
-    # Convert related products to dictionary format
-    related_products_list = [p.to_dict() for p in related_products]
-
-    return jsonify(related_products_list)

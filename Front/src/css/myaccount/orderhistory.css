@@ -102,6 +102,7 @@
 
 .order-item-name {
   font-weight: bold;
+  font-size: 16px;
 }
 
 .order-item-qty {
@@ -110,6 +111,7 @@
 
 .order-item-price{
   color: green;
+  font-weight: 600;
 }
 
 .displayed-no-order {
@@ -142,10 +144,11 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color: #007bff;
+  background-color: #3b82f6;
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  height: 3em;
+  padding: 0px 20px;
   border-radius: 5px;
   cursor: pointer;
 }

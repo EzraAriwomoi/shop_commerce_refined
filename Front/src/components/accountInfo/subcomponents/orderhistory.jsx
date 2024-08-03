@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import "../../../css/myaccount/orderhistory.css";
@@ -51,9 +52,9 @@ const OrderHistory = () => {
         <div className="order-item-details">
           <span className="order-item-name">{item.product_name}</span>
           <span className="order-item-qty">{`x${item.quantity}`}</span>
-          <span className="order-item-price">{`Kes. ${item.price}`}</span>
+          <span className="order-item-price">{`Ksh: ${item.price}`}</span>
         </div>
-        {status.toLowerCase() === "pending" && (
+        {status === "Pending" && (
           <button className="pay-now-HIST">Pay Now</button>
         )}
       </div>
@@ -83,7 +84,7 @@ const OrderHistory = () => {
               <div className="order-summary-header">
                 <span className="order-id">Order #{order.id}</span>
                 <span className="order-date">{new Date(order.created_at).toLocaleDateString()}</span>
-                <span className="order-total">{`Kes. ${order.total_price}`}</span>
+                <span className="order-total">{`Ksh: ${order.total_price}`}</span>
                 <span className={`order-status ${getStatusColor(order.status)}`}>{order.status}</span>
               </div>
               <div className="order-items">

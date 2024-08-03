@@ -54,6 +54,7 @@
     overflow: hidden;
   }
   .component-body {
+    background-color: #f8f8f8;
     padding: 2rem;
   }
   .contain {
