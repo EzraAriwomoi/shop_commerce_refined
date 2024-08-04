@@ -1,6 +1,5 @@
 .product-details {
   padding-bottom: 5vh;
-  width: 100vw;
   min-height: 100svh;
   max-height: auto;
   display: flex;
@@ -19,8 +18,9 @@
 }
 
 .pd-cont > section {
-  height: 70%;
+  height: 100%;
   width: 50%;
+  padding-top: 2em;
 }
 
 .pd-image-cont > img {
@@ -62,7 +62,7 @@
 
 .btn-heart{
   margin-left: 22px;
-  width: 28%;
+  width: 27%;
   background-color: transparent;
 }
 
@@ -71,15 +71,6 @@
 }
 
 /*Related Products */
-
-.related-products-div {
-  width: 70%;
-  height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 .rp-title {
   height: 10%;
@@ -92,15 +83,6 @@
 
 .rp-title > h2 {
   font-size: 24px;
-}
-
-.rp-div {
-  width: 100%;
-  height: 80%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2px;
 }
 
 .rp-cont {
@@ -166,13 +148,6 @@
     padding: 0px;
   }
 
-  .related-products-div{
-    min-height: 75svh;
-    max-height: auto;
-    width: 90%;
-
-  }
-
   .rp-div{
     flex-wrap: wrap;
   }
@@ -186,4 +161,95 @@
     font-size: 14px;
   }
 
+}
+
+.related-products {
+  padding: 24px;
+}
+
+.related-products h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.related-products-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.related-product-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 200px;
+  height: 405px;
+  text-align: center;
+}
+
+.related-product-item:hover {
+  scale: 1.01;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.related-product-item img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover; 
+}
+
+.related-product-info {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 3px;
+  color: rgb(92, 89, 89);
+}
+
+.related-product-info h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.related-product-info p {
+  font-size: 16px;
+  color: green;
+}
+
+/* Add to cart and wishlist styling */
+.row-wish-addcart {
+  flex: 0 0 40%;
+  width: 100%;
+  display: flex;
+  padding-left: .5em;
+  align-items: center;
+}
+
+.addcart-details {
+  height: 70%;
+  width: 77%;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  font-size: 14px;
+  margin-bottom: .4em;
+  border-radius: 5px;
+  color: white;
+  background-color: whitesmoke;
+  color: #373737;
+  border: 0.3px solid #37373762;
+}
+
+.addcart-details:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.btn-heart-productdetails{
+  margin-left: 5px;
+  width: 22%;
+  background-color: transparent;
+}
+
+.btn-heart-productdetails >svg:hover{
+  fill: #8b4513;
 }

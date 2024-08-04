@@ -13,6 +13,7 @@ const ProductDetails = () => {
     const [error, setError] = useState(null);
     const [addingToCart, setAddingToCart] = useState(false);
     const [wishlist, setWishlist] = useState(false);
+    const [relatedProducts, setRelatedProducts] = useState([]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -31,6 +32,22 @@ const ProductDetails = () => {
                 const data = await response.json();
                 setProduct(data);
                 setLoading(false);
+                
+                // Fetch related products
+                const relatedResponse = await fetch(`http://127.0.0.1:5000/products/related/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!relatedResponse.ok) {
+                    throw new Error(`HTTP error! status: ${relatedResponse.status}`);
+                }
+
+                const relatedData = await relatedResponse.json();
+                setRelatedProducts(relatedData);
+
             } catch (error) {
                 console.error('Error fetching product:', error);
                 setError(error);
@@ -158,7 +175,7 @@ const ProductDetails = () => {
                         <div className="pdd-titles">
                             <h1>{product.name}</h1>
                             <h2>
-                                PRICE: <span>Kes {product.price}</span>
+                                <span>Ksh: {product.price}</span>
                             </h2>
                         </div>
                         <p>
@@ -188,7 +205,7 @@ const ProductDetails = () => {
                         </div>
                     </section>
                 </div>
-                <RelatedProducts/>
+                <RelatedProducts products={relatedProducts} />
             </div>
             <Footer />
         </>

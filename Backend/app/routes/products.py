@@ -1,10 +1,10 @@
 import uuid
 from flask import Blueprint, Flask, current_app, request, jsonify
 from flask_jwt_extended import jwt_required
-from app.models import FeaturedProduct, Product, Category, product_category
-from app.extensions import db, firebase_storage, csrf
 from flask_cors import CORS
 from datetime import datetime
+from app.models import Product, FeaturedProduct, Category
+from app.extensions import db, firebase_storage, csrf
 
 app = Flask(__name__)
 products_bp = Blueprint('products', __name__)
@@ -14,29 +14,22 @@ CORS(products_bp, resources={r"/*": {"origins": "*"}})
 @csrf.exempt
 def get_products():
     try:
-        # Get the category query parameter from the request
         category = request.args.get('category')
-
         if category:
-            # Filter products by category
-            products = Product.query.filter(Product.categories.any(name=category)).all()
+            products = Product.query.filter(Product.categories.any(Category.name == category)).all()
         else:
-            # Get all products if no category is specified
             products = Product.query.all()
 
-        # Process the products into a list of dictionaries
-        result = []
-        for product in products:
-            result.append({
-                'id': product.id,
-                'name': product.name,
-                'description': product.description,
-                'price': product.price,
-                'stock': product.stock,
-                'image_url': product.image_url,
-                'created_at': product.created_at.isoformat(),
-                'categories': [category.name for category in product.categories]
-            })
+        result = [{
+            'id': product.id,
+            'name': product.name,
+            'description': product.description,
+            'price': product.price,
+            'stock': product.stock,
+            'image_url': product.image_url,
+            'created_at': product.created_at.isoformat(),
+            'categories': [category.name for category in product.categories]
+        } for product in products]
 
         return jsonify(result), 200
     except Exception as e:
@@ -49,7 +42,7 @@ def get_product(id):
         product = Product.query.get(id)
         if not product:
             return jsonify({'error': 'Product not found'}), 404
-        
+
         product_data = {
             'id': product.id,
             'name': product.name,
@@ -77,7 +70,6 @@ def create_product():
         return jsonify({'error': 'No selected file'}), 400
 
     try:
-        # Validate and parse the data
         name = data.get('name')
         description = data.get('description')
         price = data.get('price')
@@ -91,7 +83,6 @@ def create_product():
         price = float(price)
         stock = int(stock)
 
-        # Generate a unique filename and upload to Firebase Storage
         filename = f"{str(uuid.uuid4())}_{image.filename}"
         blob = firebase_storage.bucket.blob(filename)
         blob.content_type = image.content_type
@@ -152,13 +143,47 @@ def delete_product(id):
         if not product:
             return jsonify({'error': 'Product not found'}), 404
 
-        # Delete related featured_product entries
         db.session.query(FeaturedProduct).filter_by(product_id=product.id).delete()
-
         db.session.delete(product)
         db.session.commit()
 
         return jsonify({'message': 'Product deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': 'Internal server error', 'message': str(e)}), 500
+    
+@products_bp.route('/categories', methods=['GET'])
+def get_categories():
+    try:
+        categories = Category.query.all()
+        return jsonify([category.to_dict() for category in categories])
+    except Exception as e:
+        return jsonify({'error': 'Error fetching categories', 'message': str(e)}), 500
 
+
+@products_bp.route('/related/<int:id>', methods=['GET'])
+@csrf.exempt
+def get_related_products(id):
+    try:
+        product = Product.query.get(id)
+        if not product:
+            return jsonify({'error': 'Product not found'}), 404
+
+        categories = [category.name for category in product.categories]
+
+        related_products = Product.query.filter(
+            Product.categories.any(Category.name.in_(categories)),
+            Product.id != id
+        ).limit(10).all()
+
+        result = [{
+            'id': prod.id,
+            'name': prod.name,
+            'description': prod.description,
+            'price': prod.price,
+            'stock': prod.stock,
+            'image_url': prod.image_url
+        } for prod in related_products]
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': 'Error fetching related products', 'message': str(e)}), 500
