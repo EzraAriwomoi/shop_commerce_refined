@@ -112,7 +112,7 @@ const PLPCont = ({ productId, productName, price, imageUrl }) => {
       <div className="plpc-details">
         <div className="plpcd-details">
           <h3>{productName}</h3>
-          <span>Kes: {price}</span>
+          <span>Ksh: {price}</span>
         </div>
         <div className="plpcd-btn">
           <button className="addcart" onClick={addToCart} disabled={addingToCart}>

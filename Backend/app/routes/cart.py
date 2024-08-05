@@ -139,3 +139,17 @@ def calculate_cart_summary():
     except Exception as e:
         print("Error calculating cart summary:", e)
         return jsonify({'error': 'An error occurred while calculating cart summary'}), 500
+
+@cart_bp.route('/count', methods=['GET'])
+@cross_origin()
+@csrf.exempt
+@jwt_required()
+def get_cart_item_count():
+    try:
+        user_id = get_jwt_identity()
+        cart_item_count = CartItem.query.filter_by(user_id=user_id).count()
+
+        return jsonify({'count': cart_item_count}), 200
+    except Exception as e:
+        print("Error fetching cart item count:", e)
+        return jsonify({'error': 'An error occurred while fetching cart item count'}), 500

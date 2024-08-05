@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaBell, FaUser, FaBars } from "react-icons/fa";
@@ -7,6 +6,7 @@ import "../../css/layoutcss/layout.css";
 import axios from 'axios';
 
 const NOTIFICATIONS_API_URL = "http://127.0.0.1:5000/notifications/";
+const CART_COUNT_API_URL = "http://127.0.0.1:5000/cart/count";
 
 const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -17,6 +17,7 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [noNotifications, setNoNotifications] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   const profileRef = useRef(null);
@@ -26,11 +27,9 @@ const Navbar = () => {
     // Function to fetch notifications
     const fetchNotifications = async () => {
       try {
-        // Get token from local storage
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        // Fetch notifications from the backend
         const response = await axios.get(NOTIFICATIONS_API_URL, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,7 +38,7 @@ const Navbar = () => {
 
         if (response.status === 204) {
           setNoNotifications(true);
-          setNotifications([]);  // Clear notifications if none are available
+          setNotifications([]);
         } else {
           setNotifications(response.data);
           setNoNotifications(false);
@@ -49,8 +48,45 @@ const Navbar = () => {
       }
     };
 
+    // Function to fetch cart count
+    const fetchCartCount = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get(CART_COUNT_API_URL, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          setCartCount(response.data.count);
+          updateBadgePadding(response.data.count);
+        }
+      } catch (error) {
+        console.error("Error fetching cart count", error);
+      }
+    };
+
     fetchNotifications();
+    fetchCartCount();
+
+    // Set up polling for cart count
+    const intervalId = setInterval(fetchCartCount, 1000);
+
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
   }, [isSignInVisible]);
+
+  const updateBadgePadding = (count) => {
+    if (count > 9) {
+      document.documentElement.style.setProperty('--badge-padding', '0.2em 0.35em');
+      document.documentElement.style.setProperty('--badge-padding-mobile', '0.2em 0.35em');
+    } else {
+      document.documentElement.style.setProperty('--badge-padding', '0.2em 0.55em');
+      document.documentElement.style.setProperty('--badge-padding-mobile', '0.2em 0.55em');
+    }
+  };
 
   const handleNotificationsClick = () => {
     setNotificationsOpen(!notificationsOpen);
@@ -160,6 +196,7 @@ const Navbar = () => {
         </div>
         <div className="mobile-cart-icon" onClick={handleCartClick}>
           <FaShoppingCart />
+          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </div>
         <button
           className="mobile-menu-button"
@@ -202,6 +239,7 @@ const Navbar = () => {
               className="icon-button"
             >
               <FaShoppingCart />
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </button>
           </div>
           <div className="dropdown" ref={notificationsRef}>

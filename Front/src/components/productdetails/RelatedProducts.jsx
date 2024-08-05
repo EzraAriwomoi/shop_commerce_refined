@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../css/productdetails/productdetails.css";
@@ -115,7 +114,18 @@ const RelatedProducts = ({ products }) => {
     }
   };
 
+  const shuffleArray = (array) => {
+    let shuffledArray = array.slice();
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    return shuffledArray;
+  };
+
   if (!products.length) return null;
+
+  const shuffledProducts = shuffleArray(products);
 
   return (
     <section className="related-products">
@@ -123,7 +133,7 @@ const RelatedProducts = ({ products }) => {
         <h2>You May Also Like</h2>
       </div>
       <div className="related-products-list">
-        {products.map((product) => (
+        {shuffledProducts.map((product) => (
           <div key={product.id} className="related-product-item">
             <Link to={`/products/${product.id}`}>
               <img src={product.image_url} alt={product.name} />
