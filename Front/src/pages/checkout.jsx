@@ -276,7 +276,7 @@ export default function Checkout() {
                                                         title="shipping address"
                                                         value={temporaryAddress}
                                                         onChange={handleInputChange}
-                                                        disabled={!editMode} // Disable input when not in edit mode
+                                                        disabled={!editMode}
                                                     >
                                                         <option value=""/>
                                                         {locations.map(location => (

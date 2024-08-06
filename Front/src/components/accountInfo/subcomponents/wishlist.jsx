@@ -1,9 +1,10 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../css/myaccount/wishlist.css";
 
 const SavedItems = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://127.0.0.1:5000/wishlist/', {
@@ -15,7 +16,6 @@ const SavedItems = () => {
     })
       .then(response => response.json())
       .then(data => {
-        // Sort items by date or timestamp in descending order
         const sortedItems = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setWishlistItems(sortedItems);
       })
@@ -40,6 +40,10 @@ const SavedItems = () => {
       .catch(error => console.error('Error removing item from wishlist:', error));
   };
 
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`);
+  };
+
   const hasItems = wishlistItems.length > 0;
 
   return (
@@ -54,7 +58,14 @@ const SavedItems = () => {
           {hasItems ? (
             wishlistItems.map(item => (
               <article className="article-wishlist" key={item.product_id}>
-                <a href="" className="linkimg-wishlist">
+                <a
+                  href={`/product-details/${item.product_id}`}
+                  className="linkimg-wishlist"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleProductClick(item.product_id);
+                  }}
+                >
                   <img
                     src={item.image_url}
                     className="imgprod"
@@ -66,7 +77,6 @@ const SavedItems = () => {
                   <div className="priceitem">Ksh: {item.product_price}</div>
                 </div>
                 <div className="btns">
-                  <button className="btn_buy">Buy Now</button>
                   <button className="btnremove" onClick={() => handleRemove(item.product_id)}>
                     <svg
                       className="bin"
