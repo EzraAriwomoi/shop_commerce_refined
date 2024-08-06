@@ -342,13 +342,7 @@
   background-color: var(--secondary-color);
 }
 
-.hfl-link-one {
-  background-image: url("/17.jpg");
-  background-size: cover;
-}
-
-.hfl-link-two {
-  background-image: url("/18.jpg");
+.hfl-link {
   background-size: cover;
 }
 

@@ -454,13 +454,12 @@ body{
   
   .change-button {
     position: absolute;
-    right: 25px;
+    right: 0;
     font-size: 13px;
     background-color: transparent;
     color: rgb(23, 115, 176);
     border: none;
     border-radius: 4px;
-    padding: 10px 20px;
     cursor: pointer;
   }
 
@@ -545,3 +544,23 @@ body{
     height: 18px;
     fill: grey;
   }
+
+  /* edit mode  */
+.default-cursor {
+  cursor: default;
+}
+
+.pointer-cursor {
+  cursor: pointer;
+}
+
+/* Hide the default dropdown arrow */
+.select-hidden {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-hidden::-ms-expand {
+  display: none;
+}

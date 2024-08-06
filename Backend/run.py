@@ -4,16 +4,14 @@ from app import create_app
 from dotenv import load_dotenv
 import os
 
-# Create Flask application instance
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+from flask_cors import CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Initialize the Flask application using the create_app function from app module
 app = create_app()
 
 load_dotenv()
 
-# Add environment variables to Flask configuration
 app.config['CONSUMER_KEY'] = os.getenv('CONSUMER_KEY')
 app.config['CONSUMER_SECRET'] = os.getenv('CONSUMER_SECRET')
 app.config['API_URL'] = os.getenv('API_URL')

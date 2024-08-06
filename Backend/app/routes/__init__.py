@@ -1,4 +1,5 @@
-from flask import Blueprint
+from flask import Flask
+from flask_cors import CORS
 from .auth import auth_bp
 from .cart import cart_bp
 from .products import products_bp
@@ -11,6 +12,17 @@ from .payments import payment_bp, shipping_bp
 from .support import support_bp
 from .wishlist import wishlist_bp
 from .mpesa import mpesa_bp
+
+def create_app():
+    app = Flask(__name__)
+    
+    # Configure CORS
+    CORS(app, resources={r"/*": {"origins": "*"}})  # This allows all origins, adjust as needed
+
+    # Register routes
+    register_routes(app)
+    
+    return app
 
 def register_routes(app):
     app.register_blueprint(auth_bp, url_prefix='/auth')

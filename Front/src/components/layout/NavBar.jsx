@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaBell, FaUser, FaBars } from "react-icons/fa";
@@ -9,7 +10,6 @@ const NOTIFICATIONS_API_URL = "http://127.0.0.1:5000/notifications/";
 const CART_COUNT_API_URL = "http://127.0.0.1:5000/cart/count";
 
 const Navbar = () => {
-  const [cartOpen, setCartOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -212,7 +212,8 @@ const Navbar = () => {
             <Link className="link-to" onClick={handleProfileClick} to="/myaccount">Profile</Link>
             {isAuthenticated ? (
               <>
-                <Link className="link-to" to="/myaccount">Orders</Link>
+                <Link className="link-to" to="/products">Products</Link>
+                <Link className="link-to" to="/orders">Orders</Link>
                 <Link className="link-to" to="/wishlist">Wishlist</Link>
                 <div className="dropdown-divider-mobile"></div>
                 <a href="#" onClick={handleSignOut}>Logout</a>

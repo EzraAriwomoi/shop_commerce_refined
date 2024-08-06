@@ -11,10 +11,14 @@ export default function Checkout() {
     const [cartItems, setCartItems] = useState([]);
     const [mpesaPhoneNumber, setMpesaPhoneNumber] = useState("");
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("creditCard");
-    const navigate = useNavigate(); // Initialize navigate for redirection
+    const [shippingAddress, setShippingAddress] = useState("");
+    const navigate = useNavigate();
+    const [temporaryAddress, setTemporaryAddress] = useState(shippingAddress);
+    const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
         fetchCartItems();
+        fetchUserProfile();
     }, []);
 
     const fetchCartItems = async () => {
@@ -34,6 +38,68 @@ export default function Checkout() {
             console.error("Error fetching cart items:", error);
         }
     };
+
+    const fetchUserProfile = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get("http://localhost:5000/profile/", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (response.status === 200) {
+                setShippingAddress(response.data.location || "");
+                setMpesaPhoneNumber(response.data.mpesaNumber || "");
+            } else {
+                throw new Error("Failed to fetch user profile");
+            }
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+        }
+    };
+
+    // const handleInputChange = (e) => {
+    //     setShippingAddress(e.target.value);
+    // };
+
+    const toggleEditMode = () => {
+        setEditMode(prevEditMode => {
+            console.log("Toggling edit mode. Previous:", prevEditMode); // Debugging statement
+            return !prevEditMode;
+        });
+    };
+
+    useEffect(() => {
+        setTemporaryAddress(shippingAddress);
+    }, [shippingAddress]);
+
+
+    // Save profile changes
+    const handleInputChange = (e) => {
+        setTemporaryAddress(e.target.value);
+    };
+
+    const handleSave = () => {
+        const token = localStorage.getItem("token");
+        axios.put('http://127.0.0.1:5000/profile/update-location', { location: temporaryAddress }, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(() => {
+                alert('Shipping address updated successfully!');
+                setShippingAddress(temporaryAddress); // Update the actual state after saving
+                setEditMode(false); // Exit edit mode after saving
+            })
+            .catch(error => {
+                console.error('Error updating shipping address:', error);
+                alert('Failed to update shipping address.');
+            });
+    };
+
+
 
     const calculateSubtotal = () => {
         let subtotal = 0;
@@ -55,7 +121,7 @@ export default function Checkout() {
     };
 
     const clearCart = () => {
-        setCartItems([]); // Clear cart items from state
+        setCartItems([]);
     };
 
     const handlePlaceOrder = async () => {
@@ -65,19 +131,20 @@ export default function Checkout() {
                 total_price: calculateTotal(),
                 payment_method: selectedPaymentMethod,
                 mpesa_phone_number: selectedPaymentMethod === "mpesa" ? mpesaPhoneNumber : null,
+                shipping_address: shippingAddress,
                 status: 'Pending',
                 created_at: new Date().toISOString(),
             };
-    
+
             const response = await axios.post("http://localhost:5000/orders/", orderData, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
+
             const orderId = response.data.order_id;
-    
+
             if (selectedPaymentMethod === "mpesa") {
                 const mpesaResponse = await axios.post("http://127.0.0.1:5000/mpesa/online/lipa", {
                     order_id: orderId,
@@ -90,7 +157,7 @@ export default function Checkout() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-    
+
                 if (mpesaResponse.status === 200) {
                     alert('Payment initiated successfully with M-PESA!');
                     clearCart();
@@ -105,14 +172,14 @@ export default function Checkout() {
                     product_id: item.product_id,
                     quantity: item.quantity,
                 }));
-    
+
                 await axios.post("http://localhost:5000/orders/items", orderItems, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
                     },
                 });
-    
+
                 // clearCart();
                 // navigate('/orders');
                 // alert('Order placed successfully!');
@@ -122,9 +189,62 @@ export default function Checkout() {
             alert('Failed to place order');
         }
     };
-    
 
-    
+    const locations = [
+        "A.S.K. Showground/Wanye",
+        "Adams Arcade / Dagoretti Corner",
+        "Bahati / Marish / Viwandani / Jeri",
+        "Bomas/CUEA/Galleria",
+        "Buruburu / Hamza / Harambee",
+        "CBD - GPO/City Market/Nation Centre",
+        "CBD - KICC/Parliament/Kencom",
+        "CBD - Luthuli/Afya Centre/ R. Ngala",
+        "CBD - UON/Globe/Koja/River Road",
+        "City Stadium/Makongeni/Mbotela",
+        "Embakasi East-Pipeline/Transami/Airport North Rd",
+        "Embakasi North - Dandora / Kariobangi North",
+        "Embakasi South - Bunyala Road / South B",
+        "Embakasi South - Mombasa Road/Sameer Park/General Motors/ICD",
+        "Embakasi South-Landimawe/KwaReuben/Kware/Pipeline",
+        "Garden Estate/Thome/Marurui",
+        "Gigiri/Village market/UN",
+        "Githurai/Kahawa Sukari",
+        "Hurlingham/DOD/Yaya center",
+        "Huruma / Kiamaiko / Mbatini / Ngei",
+        "Imara Daima/AA/Maziwa/Kwa Njenga",
+        "Kahawa Wendani/ Kenyatta University",
+        "Kahawa west/Githurai 44",
+        "Kamukunji - Airbase/Mlango Kubwa",
+        "Kamukunji - Eastleigh/California/Shauri Moyo",
+        "Kamulu",
+        "Karen",
+        "Kariobangi South/Dandora/Airbase",
+        "Kawangware/Stage 56",
+        "Kilimani/State House/Denis Pritt",
+        "Kinoo/Zambezi/Ngecha",
+        "Kiserian/Corner Baridi/Ongata Rongai",
+        "Korogocho / Baraka / Gitathuru / Grogan",
+        "Langata/Hardy/Mbagathi",
+        "Lavington/Mziima/James Gichuru",
+        "Muthaiga/Parklands",
+        "Ngara/Pangani",
+        "Ngong/Kibiku",
+        "Nyayo Highrise/Nairobi West",
+        "Roy Sambu/Kasarani",
+        "Ruai",
+        "Ruiru",
+        "Runda/Estate/Muthaiga",
+        "Rwaka/Two Rivers",
+        "South C",
+        "Thindigua/Kasarini",
+        "Umoja/Infill",
+        "Utawala",
+        "Valley Road / Community / Kenyatta Hospital",
+        "Waiyaki Way/Kangemi",
+        "Westlands",
+        "Ziwani/Zimmerman/Githurai 45"
+    ];
+
 
     return (
         <>
@@ -151,8 +271,31 @@ export default function Checkout() {
                                         <div className="shipping-field">
                                             <div className="field-container">
                                                 <div className="input-wrapper">
-                                                    <input className="row-input-shipping" title="shipping address" />
-                                                    <button className="change-button">Change</button>
+                                                    <select
+                                                        className={`row-input-shipping select-hidden ${editMode ? 'pointer-cursor' : 'default-cursor'}`}
+                                                        title="shipping address"
+                                                        value={temporaryAddress}
+                                                        onChange={handleInputChange}
+                                                        disabled={!editMode} // Disable input when not in edit mode
+                                                    >
+                                                        <option value=""/>
+                                                        {locations.map(location => (
+                                                            <option key={location} value={location}>
+                                                                {location}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <button
+                                                        className="change-button"
+                                                        onClick={() => {
+                                                            if (editMode) {
+                                                                handleSave();
+                                                            }
+                                                            toggleEditMode();
+                                                        }}
+                                                    >
+                                                        {editMode ? "Save" : "Change"}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -226,7 +369,7 @@ export default function Checkout() {
                                                                             name="basic"
                                                                             className="payment-input"
                                                                             checked={selectedPaymentMethod === "mpesa"}
-                                                                            onChange={(e) => handlePaymentMethodChange("mpesa",e.target.value)}
+                                                                            onChange={(e) => handlePaymentMethodChange("mpesa", e.target.value)}
                                                                         />
                                                                     </div>
                                                                     <div className="payment-option-details">
@@ -243,16 +386,16 @@ export default function Checkout() {
                                                                         <p className="mpesa-description">You will be prompted with a pop-up window to enter your M-PESA pin once you place the order.</p>
                                                                     </div>
                                                                     <div className="payment-field">
-                                                                        <input 
-                                                                        type="text" 
-                                                                        value={mpesaPhoneNumber}
-                                                                        onChange={(e) => {
-                                                                            setMpesaPhoneNumber(e.target.value);
-                                                                            // console.log("M-PESA phone number updated:", e.target.value); // Debugging statement
-                                                                        }}
-                                                                        placeholder="Enter your m-pesa number" 
-                                                                        className="field-input">
-                                                                        {/* disabled={selectedPaymentMethod !== "mpesa"} */}
+                                                                        <input
+                                                                            type="text"
+                                                                            value={mpesaPhoneNumber}
+                                                                            onChange={(e) => {
+                                                                                setMpesaPhoneNumber(e.target.value);
+                                                                                // console.log("M-PESA phone number updated:", e.target.value); // Debugging statement
+                                                                            }}
+                                                                            placeholder="Enter your m-pesa number"
+                                                                            className="field-input">
+                                                                            {/* disabled={selectedPaymentMethod !== "mpesa"} */}
                                                                         </input>
                                                                     </div>
                                                                 </div>

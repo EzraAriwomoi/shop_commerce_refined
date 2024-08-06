@@ -1,29 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../css/homepagecss/homepage.css";
 import HLCont from "./HLCont";
+
 const HLatest = () => {
-  const [latestProducts, setLatestProducts] = useState([
-    {
-      productName: "Product Name",
-      productPrice: "Kes: 500",
-      productId: Math.random(),
-    },
-    {
-      productName: "Product Name",
-      productPrice: "Kes: 500",
-      productId: Math.random(),
-    },
-    {
-      productName: "Product Name",
-      productPrice: "Kes: 500",
-      productId: Math.random(),
-    },
-    {
-      productName: "Product Name",
-      productPrice: "Kes: 500",
-      productId: Math.random(),
-    },
-  ]);
+  const [latestProducts, setLatestProducts] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRandomLatestProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/products/random-latest-products'); // Adjust the URL as needed
+        if (response.ok) {
+          const data = await response.json();
+          setLatestProducts(data);
+        } else {
+          console.error('Failed to fetch random latest products');
+        }
+      } catch (error) {
+        console.error('Error fetching random latest products:', error);
+      }
+    };
+
+    fetchRandomLatestProducts();
+  }, []);
+
+  const handleProductClick = (productId) => {
+    // Navigate to the product details page with the selected product ID
+    navigate(`/products/${productId}`);
+  };
+
   return (
     <div className="h-latest">
       <div className="hl-titles">
@@ -32,12 +38,20 @@ const HLatest = () => {
       </div>
       <div className="hl-div">
         <div className="hl-main-image">
-          <img src="/l2.jpg" />
+          <img src="/l2.jpg" alt="Main" />
         </div>
         <div className="hl-sub-image">
-          {latestProducts.map((a) => {
-            return <HLCont productDetails={a} key={Math.random()} />;
-          })}
+          {latestProducts.map((product) => (
+            <HLCont
+              key={product.id}
+              productDetails={{
+                productName: product.name,
+                productPrice: `Kes: ${product.price}`,
+                productImage: product.image_url,
+              }}
+              onClick={() => handleProductClick(product.id)} // Pass the click handler
+            />
+          ))}
         </div>
       </div>
     </div>

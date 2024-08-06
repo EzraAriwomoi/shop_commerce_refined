@@ -172,7 +172,7 @@ a {
 }
 
 .social-icons a {
-  color: white;
+  color: whitesmoke;
   font-size: 1.5rem;
   padding-right: 1rem;
 }
@@ -185,12 +185,17 @@ a {
   border-top: 1px solid #ddd;
   margin-top: 2rem;
   padding-top: 1rem;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-bottom >p{
+  padding-right: 4em;
 }
 
 .footer-bottom-links a {
   margin: 0 0.5rem;
-  color: #333;
+  color: whitesmoke;
 }
 
 /* NavBar */
@@ -491,6 +496,9 @@ a {
 
   .footer-brand {
     padding: 0px;
+  }
+  .footer-bottom >p{
+    padding-right: .8em;
   }
 }
 

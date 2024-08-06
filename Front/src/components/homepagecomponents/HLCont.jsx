@@ -1,10 +1,15 @@
+/* eslint-disable react/prop-types */
 import "../../css/homepagecss/homepage.css";
 
-const HLCont = ({productDetails}) => {
+const HLCont = ({ productDetails, onClick }) => {
   return (
-    <div className="hl-cont">
+    <div className="hl-cont" onClick={onClick} style={{ cursor: 'pointer' }}>
       <div className="hlc-image">
-        <img src="/ring.jpeg" className="hlci-img" />
+        <img
+          src={productDetails.productImage}
+          className="hlci-img"
+          alt={productDetails.productName}
+        />
       </div>
       <div className="hlc-details">
         <h3>{productDetails.productName}</h3>

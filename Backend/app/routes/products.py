@@ -1,4 +1,5 @@
 import uuid
+import random
 from flask import Blueprint, Flask, current_app, request, jsonify
 from flask_jwt_extended import jwt_required
 from flask_cors import CORS
@@ -15,7 +16,7 @@ CORS(products_bp, resources={r"/*": {"origins": "*"}})
 def get_products():
     try:
         category = request.args.get('category')
-        if category:
+        if category and category != 'undefined':
             products = Product.query.filter(Product.categories.any(Category.name == category)).all()
         else:
             products = Product.query.all()
@@ -187,3 +188,86 @@ def get_related_products(id):
         return jsonify(result), 200
     except Exception as e:
         return jsonify({'error': 'Error fetching related products', 'message': str(e)}), 500
+
+@products_bp.route('/random-latest-products', methods=['GET'])
+def get_random_latest_products():
+    try:
+        # Get all categories
+        categories = Category.query.all()
+        category_names = [category.name for category in categories]
+
+        # Fetch the latest products from each category
+        products_by_category = {}
+        for category_name in category_names:
+            products = Product.query.filter(Product.categories.any(Category.name == category_name)).order_by(Product.created_at.desc()).limit(4).all()
+            products_by_category[category_name] = products
+
+        # Collect one product per category, but only up to 4 products
+        selected_products = []
+        for category, products in products_by_category.items():
+            if products and len(selected_products) < 4:
+                selected_products.append(random.choice(products))
+                if len(selected_products) == 4:
+                    break
+
+        # If fewer than 4 products, add more random products
+        if len(selected_products) < 4:
+            all_products = Product.query.order_by(Product.created_at.desc()).limit(20).all()
+            additional_products = [p for p in all_products if p not in selected_products]
+            selected_products.extend(random.sample(additional_products, 4 - len(selected_products)))
+
+        # Prepare the response
+        result = [{
+            'id': product.id,
+            'name': product.name,
+            'price': product.price,
+            'image_url': product.image_url
+        } for product in selected_products[:4]]  # Ensure only 4 products are returned
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': 'Error fetching random latest products', 'message': str(e)}), 500
+    
+@products_bp.route('/featured-products', methods=['GET'])
+def get_featured_products():
+    try:
+        # Fetch featured products
+        featured_products = Product.query.filter_by(is_featured=True).order_by(Product.created_at.desc()).limit(20).all()
+
+        # Randomly select 4 products from the featured products
+        selected_products = random.sample(featured_products, min(4, len(featured_products)))
+
+        # Prepare the response
+        result = [{
+            'id': product.id,
+            'name': product.name,
+            'image_url': product.image_url
+        } for product in selected_products]
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': 'Error fetching featured products', 'message': str(e)}), 500
+    
+@products_bp.route('/random-categories', methods=['GET'])
+def get_random_categories():
+    try:
+        # Fetch all categories
+        all_categories = Category.query.all()
+
+        # Randomly select 2 categories
+        selected_categories = random.sample(all_categories, min(2, len(all_categories)))
+
+        # Fetch a random product image for each selected category
+        result = []
+        for category in selected_categories:
+            product = Product.query.filter(Product.categories.any(Category.id == category.id)).first()
+            category_image = product.image_url if product else 'default-image-url'  # Provide a default image if none found
+            result.append({
+                'id': category.id,
+                'name': category.name,
+                'image_url': category_image
+            })
+
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': 'Error fetching random categories', 'message': str(e)}), 500
