@@ -4,7 +4,7 @@ import "../../css/homepagecss/homepage.css";
 
 const HFeaturedLinks = () => {
   const [categories, setCategories] = useState([]);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRandomCategories = async () => {
@@ -25,7 +25,6 @@ const HFeaturedLinks = () => {
   }, []);
 
   const handleCategoryClick = (categoryName) => {
-    // Navigate to the products page with the selected category
     navigate(`/products?category=${categoryName}`);
   };
 
@@ -37,7 +36,7 @@ const HFeaturedLinks = () => {
             key={category.id}
             className="hfl-link"
             style={{ backgroundImage: `url(${category.image_url})` }}
-            onClick={() => handleCategoryClick(category.name)} // Add click handler
+            onClick={() => handleCategoryClick(category.name)}
           >
             <a href="#">
               <h3>View {category.name}</h3>

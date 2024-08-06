@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 import "../../../css/myaccount/orderhistory.css";
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
@@ -55,10 +58,14 @@ const OrderHistory = () => {
           <span className="order-item-price">{`Ksh: ${item.price}`}</span>
         </div>
         {status === "Pending" && (
-          <button className="pay-now-HIST">Pay Now</button>
+          <button className="pay-now-HIST" onClick={() => handlePayNow(item.order_id)}>Pay Now</button>
         )}
       </div>
     );
+  };
+
+  const handlePayNow = (orderId) => {
+    navigate("/checkout", { state: { orderId } });
   };
 
   return (

@@ -26,7 +26,6 @@ const HLatest = () => {
   }, []);
 
   const handleProductClick = (productId) => {
-    // Navigate to the product details page with the selected product ID
     navigate(`/products/${productId}`);
   };
 
@@ -46,10 +45,10 @@ const HLatest = () => {
               key={product.id}
               productDetails={{
                 productName: product.name,
-                productPrice: `Kes: ${product.price}`,
+                productPrice: `Ksh: ${product.price}`,
                 productImage: product.image_url,
               }}
-              onClick={() => handleProductClick(product.id)} // Pass the click handler
+              onClick={() => handleProductClick(product.id)}
             />
           ))}
         </div>

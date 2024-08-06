@@ -564,3 +564,12 @@ body{
 .select-hidden::-ms-expand {
   display: none;
 }
+
+
+.unavailable-text {
+  font-size: .85em;
+  color: red;
+  padding-left: 2em;
+  margin-left: 0.5em;
+  text-align: center;
+}

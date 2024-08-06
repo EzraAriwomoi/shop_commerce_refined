@@ -324,7 +324,9 @@ export default function Checkout() {
                                                                         />
                                                                     </div>
                                                                     <div className="payment-option-details">
-                                                                        <span className="payment-option-title">Credit card</span>
+                                                                        <span className="payment-option-title">Credit card
+                                                                        <span className="unavailable-text">currently not available</span>
+                                                                        </span>
                                                                         <div className="payment-icons">
                                                                             <img alt="VISA" src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" width="38" height="24" className="payment-icon" />
                                                                             <img alt="MASTERCARD" src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/ae9ceec48b1dc489596c.svg" width="38" height="24" className="payment-icon" />

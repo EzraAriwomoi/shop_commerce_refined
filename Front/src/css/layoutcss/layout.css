@@ -278,9 +278,18 @@ a {
   display: block;
 }
 
-.dropdown-content a:hover {
+.dropdown-content a:hover{
   background-color: #f1f1f1;
   color: #8b4513;
+  fill: #8b4513;
+}
+
+.icon-drop {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  vertical-align: middle;
+  fill: rgb(102, 97, 97);
 }
 
 .mobile-view {
@@ -450,9 +459,14 @@ a {
     overflow: hidden;
   }
 
-  .dropdown-content-mobileview a,
   .link-to{
     padding-top: 14px;
+    padding-left: 20px;
+    color: black;
+    font-size: 18px;
+  }
+
+  .logout-signin-mobile{
     padding-left: 20px;
     font-size: 20;
     color: black;
