@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,6 +23,8 @@ const Navbar = () => {
 
   const profileRef = useRef(null);
   const notificationsRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const fabarsRef = useRef(null);
 
   useEffect(() => {
     // Function to fetch notifications
@@ -72,12 +75,13 @@ const Navbar = () => {
     fetchNotifications();
     fetchCartCount();
 
-    // Set up polling for cart count
+    // Refresh the cart count number after every 1sec
     const intervalId = setInterval(fetchCartCount, 1000);
 
     return () => clearInterval(intervalId); // Clean up the interval on component unmount
   }, [isSignInVisible]);
 
+  // Cart count number batch to shange shape when item in cart is greater than 9
   const updateBadgePadding = (count) => {
     if (count > 9) {
       document.documentElement.style.setProperty('--badge-padding', '0.2em 0.35em');
@@ -89,7 +93,11 @@ const Navbar = () => {
   };
 
   const handleNotificationsClick = () => {
-    setNotificationsOpen(!notificationsOpen);
+    if (isAuthenticated) {
+      setNotificationsOpen(!notificationsOpen);
+    }
+    else
+      setIsSignInVisible(true);
   };
 
   const toggleDropdown = (setter) => {
@@ -100,6 +108,7 @@ const Navbar = () => {
     setIsSignInVisible(false);
     setProfileOpen(false);
 
+    // Backend code to logout from website
     try {
       const response = await fetch('http://127.0.0.1:5000/auth/logout', {
         method: 'POST',
@@ -148,6 +157,7 @@ const Navbar = () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
+      // Backend code to check if the user is signed in
       try {
         const response = await axios.get('http://127.0.0.1:5000/auth/status', {
           headers: {
@@ -170,6 +180,9 @@ const Navbar = () => {
       if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
         setNotificationsOpen(false);
       }
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) && !fabarsRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -177,6 +190,10 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleFaBarsClick = () => {
+    setMobileMenuOpen((prev) => !prev);
+  };
 
   return (
     <nav className="navbar">
@@ -190,45 +207,64 @@ const Navbar = () => {
         <div
           className="mobile-bell-icon"
           onClick={handleNotificationsClick}
+          ref={notificationsRef}
         >
-          <FaBell />
+          <FaBell title="notifications" />
           {notificationsOpen && <NotificationMenu notifications={notifications} noNotifications={noNotifications} />}
         </div>
         <div className="mobile-cart-icon" onClick={handleCartClick}>
-          <FaShoppingCart />
+          <FaShoppingCart title="cart" />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </div>
         <button
           className="mobile-menu-button"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={handleFaBarsClick}
+          ref={fabarsRef}
         >
           <FaBars />
         </button>
       </div>
 
-      <div className={`navbar-content ${mobileMenuOpen ? "active" : ""}`}>
+      <div className={`navbar-content ${mobileMenuOpen ? "active" : ""}`} ref={mobileMenuRef}>
         {mobileMenuOpen ? (
           <div className="dropdown-content-mobileview">
-            <Link onClick={handleProfileClick} to="/myaccount" className="link-to profile-link">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
-                <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 64c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96zm0 416c-70.7 0-133.1-39.3-164.3-97.5 12.8-24.8 37.8-42.5 66.7-42.5h195.2c28.9 0 53.9 17.7 66.7 42.5C389.1 440.7 326.7 480 256 480z" />
-              </svg>
-              Profile
-            </Link>
             {isAuthenticated ? (
               <>
+                <Link to="/" className="link-to">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="icon-drop">
+                    <path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z" />
+                  </svg>
+                  Home
+                </Link>
+
                 <Link className="link-to" to="/orders">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="icon-drop">
                     <path d="M14 2.2C22.5-1.7 32.5-.3 39.6 5.8L80 40.4 120.4 5.8c9-7.7 22.3-7.7 31.2 0L192 40.4 232.4 5.8c9-7.7 22.3-7.7 31.2 0L304 40.4 344.4 5.8c7.1-6.1 17.1-7.5 25.6-3.6s14 12.4 14 21.8l0 464c0 9.4-5.5 17.9-14 21.8s-18.5 2.5-25.6-3.6L304 471.6l-40.4 34.6c-9 7.7-22.3 7.7-31.2 0L192 471.6l-40.4 34.6c-9 7.7-22.3 7.7-31.2 0L80 471.6 39.6 506.2c-7.1 6.1-17.1 7.5-25.6 3.6S0 497.4 0 488L0 24C0 14.6 5.5 6.1 14 2.2zM96 144c-8.8 0-16 7.2-16 16s7.2 16 16 16l192 0c8.8 0 16-7.2 16-16s-7.2-16-16-16L96 144zM80 352c0 8.8 7.2 16 16 16l192 0c8.8 0 16-7.2 16-16s-7.2-16-16-16L96 336c-8.8 0-16 7.2-16 16zM96 240c-8.8 0-16 7.2-16 16s7.2 16 16 16l192 0c8.8 0 16-7.2 16-16s-7.2-16-16-16L96 240z" />
                   </svg>
                   Orders
                 </Link>
+
                 <Link className="link-to" to="/wishlist">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
                     <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
                   </svg>
                   Wishlist
                 </Link>
+
+                <Link to="/contactus" className="link-to">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
+                    <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+                  </svg>
+                  Contact Us
+                </Link>
+
+                <Link onClick={handleProfileClick} to="/myaccount" className="link-to profile-link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
+                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 64c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96zm0 416c-70.7 0-133.1-39.3-164.3-97.5 12.8-24.8 37.8-42.5 66.7-42.5h195.2c28.9 0 53.9 17.7 66.7 42.5C389.1 440.7 326.7 480 256 480z" />
+                  </svg>
+                  Profile
+                </Link>
+
                 <div className="dropdown-divider-mobile"></div>
                 <a href="#" className="logout-signin-mobile" onClick={handleSignOut}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
@@ -239,6 +275,20 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <Link to="/" className="link-to">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" className="icon-drop">
+                    <path d="M575.8 255.5c0 18-15 32.1-32 32.1l-32 0 .7 160.2c0 2.7-.2 5.4-.5 8.1l0 16.2c0 22.1-17.9 40-40 40l-16 0c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1L416 512l-24 0c-22.1 0-40-17.9-40-40l0-24 0-64c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32 14.3-32 32l0 64 0 24c0 22.1-17.9 40-40 40l-24 0-31.9 0c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2l-16 0c-22.1 0-40-17.9-40-40l0-112c0-.9 0-1.9 .1-2.8l0-69.7-32 0c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z" />
+                  </svg>
+                  Home
+                </Link>
+
+                <Link onClick={handleProfileClick} to="/myaccount" className="link-to profile-link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
+                    <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 64c53 0 96 43 96 96s-43 96-96 96-96-43-96-96 43-96 96-96zm0 416c-70.7 0-133.1-39.3-164.3-97.5 12.8-24.8 37.8-42.5 66.7-42.5h195.2c28.9 0 53.9 17.7 66.7 42.5C389.1 440.7 326.7 480 256 480z" />
+                  </svg>
+                  Profile
+                </Link>
+
                 <div className="dropdown-divider-mobile"></div>
                 <a href="#" className="logout-signin-mobile" onClick={handleSignInClick}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="icon-drop">
@@ -263,7 +313,7 @@ const Navbar = () => {
               onClick={handleCartClick}
               className="icon-button"
             >
-              <FaShoppingCart />
+              <FaShoppingCart title='cart' />
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </button>
           </div>
@@ -272,7 +322,7 @@ const Navbar = () => {
               onClick={handleNotificationsClick}
               className="icon-button"
             >
-              <FaBell />
+              <FaBell title='notifications' />
             </button>
             {notificationsOpen && <NotificationMenu notifications={notifications} noNotifications={noNotifications} />}
           </div>
@@ -281,7 +331,7 @@ const Navbar = () => {
               onClick={() => toggleDropdown(setProfileOpen)}
               className="icon-button"
             >
-              <FaUser />
+              <FaUser title='profile' />
             </button>
             {profileOpen && (
               <div className="dropdown-content">
