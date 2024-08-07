@@ -23,7 +23,7 @@ const CustomerSignInComponent = ({ onClose, onChangeView }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/signin', {
+      const response = await fetch('https://back-server-1.onrender.com/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

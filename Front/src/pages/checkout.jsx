@@ -24,7 +24,7 @@ export default function Checkout() {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get("https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/", {
+            const response = await axios.get("https://back-server-1.onrender.com/cart/", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export default function Checkout() {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get("https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/", {
+            const response = await axios.get("https://back-server-1.onrender.com/profile/", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -59,13 +59,9 @@ export default function Checkout() {
         }
     };
 
-    // const handleInputChange = (e) => {
-    //     setShippingAddress(e.target.value);
-    // };
-
     const toggleEditMode = () => {
         setEditMode(prevEditMode => {
-            console.log("Toggling edit mode. Previous:", prevEditMode); // Debugging statement
+            console.log("Toggling edit mode. Previous:", prevEditMode);
             return !prevEditMode;
         });
     };
@@ -82,7 +78,7 @@ export default function Checkout() {
 
     const handleSave = () => {
         const token = localStorage.getItem("token");
-        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/update-location', { location: temporaryAddress }, {
+        axios.put('https://back-server-1.onrender.com/update-location', { location: temporaryAddress }, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -136,7 +132,7 @@ export default function Checkout() {
                 created_at: new Date().toISOString(),
             };
 
-            const response = await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/orders/", orderData, {
+            const response = await axios.post("https://back-server-1.onrender.com/orders/", orderData, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -146,7 +142,7 @@ export default function Checkout() {
             const orderId = response.data.order_id;
 
             if (selectedPaymentMethod === "mpesa") {
-                const mpesaResponse = await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/mpesa/online/lipa", {
+                const mpesaResponse = await axios.post("https://back-server-1.onrender.com/mpesa/online/lipa", {
                     order_id: orderId,
                     phone_number: mpesaPhoneNumber,
                     amount: calculateTotal(),
@@ -173,7 +169,7 @@ export default function Checkout() {
                     quantity: item.quantity,
                 }));
 
-                await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/orders/items", orderItems, {
+                await axios.post("https://back-server-1.onrender.com/orders/items", orderItems, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

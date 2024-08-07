@@ -11,7 +11,7 @@ const HMCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://hp7p5v0d-5000.inc1.devtunnels.ms/products/categories');
+        const response = await axios.get('https://back-server-1.onrender.com/products/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

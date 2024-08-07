@@ -8,7 +8,7 @@ const SavedItems = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/', {
+    fetch('https://back-server-1.onrender.com/wishlist/', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -24,7 +24,7 @@ const SavedItems = () => {
   }, []);
 
   const handleRemove = (productId) => {
-    fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${productId}`, {
+    fetch(`https://back-server-1.onrender.com/wishlist/${productId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,

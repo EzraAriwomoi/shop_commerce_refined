@@ -48,7 +48,7 @@ function ShoppingCartItems({
   const updateQuantity = async (newQuantity) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/update/${product_id}`, {
+      await axios.put(`https://back-server-1.onrender.com/cart/update/${product_id}`, {
         product_id: product_id,
         quantity: newQuantity,
       }, {
@@ -72,7 +72,7 @@ function ShoppingCartItems({
   const handleRemoveItem = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/remove/${product_id}`, {
+      const response = await axios.delete(`https://back-server-1.onrender.com/cart/remove/${product_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -139,7 +139,7 @@ export default function ShoppingcartPage() {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/", {
+      const response = await fetch("https://back-server-1.onrender.com/cart/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

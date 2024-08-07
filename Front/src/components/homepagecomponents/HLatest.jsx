@@ -10,7 +10,7 @@ const HLatest = () => {
   useEffect(() => {
     const fetchRandomLatestProducts = async () => {
       try {
-        const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/products/random-latest-products');
+        const response = await fetch('https://back-server-1.onrender.com/products/random-latest-products');
         if (response.ok) {
           const data = await response.json();
           setLatestProducts(data);

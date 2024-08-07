@@ -33,7 +33,7 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
     }
   
     try {
-      const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/signup', {
+      const response = await fetch('https://back-server-1.onrender.com/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const CustomerRegisterComponent = ({ onClose, onChangeView }) => {
       }
   
       // Display success message
-      alert(data.message); // Replace with your preferred UI notification
+      alert(data.message);
   
       // Redirect to sign-in view after successful registration
       onChangeView('sign-in');

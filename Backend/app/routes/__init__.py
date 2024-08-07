@@ -17,7 +17,7 @@ def create_app():
     app = Flask(__name__)
     
     # Configure CORS
-    CORS(app, resources={r"/*": {"origins": "*"}})  # This allows all origins, adjust as needed
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     # Register routes
     register_routes(app)

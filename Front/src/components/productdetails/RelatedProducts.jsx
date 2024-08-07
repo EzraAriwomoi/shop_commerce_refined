@@ -16,7 +16,7 @@ const RelatedProducts = ({ products }) => {
 
       try {
         const statuses = await Promise.all(products.map(async (product) => {
-          const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/check/${product.id}`, {
+          const response = await fetch(`https://back-server-1.onrender.com/wishlist/check/${product.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const RelatedProducts = ({ products }) => {
     try {
       const user_id = localStorage.getItem('user_id');
 
-      const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/add`, {
+      const response = await fetch(`https://back-server-1.onrender.com/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const RelatedProducts = ({ products }) => {
 
     try {
         const method = wishlistStatuses[productId] ? 'DELETE' : 'POST';
-        const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${productId}`, {
+        const response = await fetch(`https://back-server-1.onrender.com/wishlist/${productId}`, {
             method,
             headers: {
                 'Content-Type': 'application/json',

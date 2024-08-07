@@ -18,7 +18,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/products/products/${id}`, {
+                const response = await fetch(`https://back-server-1.onrender.com/products/products/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const ProductDetails = () => {
                 setLoading(false);
                 
                 // Fetch related products
-                const relatedResponse = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/related/${id}`, {
+                const relatedResponse = await fetch(`https://back-server-1.onrender.com/products/related/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const ProductDetails = () => {
             if (!token) return;
 
             try {
-                const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/check/${id}`, {
+                const response = await fetch(`https://back-server-1.onrender.com/wishlist/check/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const ProductDetails = () => {
         try {
             const user_id = localStorage.getItem('user_id');
 
-            const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/add`, {
+            const response = await fetch(`https://back-server-1.onrender.com/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const ProductDetails = () => {
         }
 
         try {
-            const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${product.id}`, {
+            const response = await fetch(`https://back-server-1.onrender.com/wishlist/${product.id}`, {
                 method: wishlist ? 'DELETE' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

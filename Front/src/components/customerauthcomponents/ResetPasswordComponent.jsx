@@ -17,7 +17,7 @@ const ResetPasswordComponent = ({ onClose, onChangeView }) => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/request-password-reset', {
+      const response = await fetch('https://back-server-1.onrender.com/auth/request-password-reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,8 +29,8 @@ const ResetPasswordComponent = ({ onClose, onChangeView }) => {
         throw new Error(data.error || 'Request password reset failed');
       }
 
-      alert(data.message); // Replace with your preferred UI notification
-      onChangeView('password-reset-form', { token: data.token }); // Pass the token to the reset form view
+      alert(data.message);
+      onChangeView('password-reset-form', { token: data.token });
 
     } catch (error) {
       console.error('Error requesting password reset:', error);

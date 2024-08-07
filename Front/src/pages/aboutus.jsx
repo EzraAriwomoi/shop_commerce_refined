@@ -16,7 +16,7 @@ const AboutPage = () => {
           <h2 className="headers-about">Our Story</h2>
           <div className="story-content">
             <img
-              src="public/zuOPV13g-scaled.jpeg"
+              src="/zuOPV13g-scaled.jpeg"
               alt="Our Workshop"
               className="story-image"
             />

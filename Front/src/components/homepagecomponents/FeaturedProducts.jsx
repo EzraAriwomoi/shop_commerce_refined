@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/products/featured-products');
+        const response = await fetch('https://back-server-1.onrender.com/products/featured-products');
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -41,7 +41,7 @@ const FeaturedProducts = () => {
               productName: product.name,
               imageSrc: product.image_url,
             }}
-            onClick={() => handleProductClick(product.id)} // Pass the click handler
+            onClick={() => handleProductClick(product.id)}
           />
         ))}
       </div>

@@ -22,7 +22,7 @@ export default function MyAccount() {
   useEffect(() => {
     // Fetch user details from backend
     const token = localStorage.getItem("token");
-    axios.get('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/', {
+    axios.get('https://back-server-1.onrender.com/profile/', {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function MyAccount() {
 
     switch (section) {
       case 'personalDetails':
-        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-personal-details', {
+        axios.put('https://back-server-1.onrender.com/update-personal-details', {
           first_name: userDetails.firstName,
           last_name: userDetails.lastName,
           email: userDetails.email,
@@ -88,7 +88,7 @@ export default function MyAccount() {
           return;
         }
 
-        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/change-password', {
+        axios.put('https://back-server-1.onrender.com/change-password', {
           old_password: oldPassword,
           new_password: newPassword
         }, {
@@ -106,7 +106,7 @@ export default function MyAccount() {
       }
 
       case 'shippingAddress':
-        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-location', { location: userDetails.location }, {
+        axios.put('https://back-server-1.onrender.com/profile/update-location', { location: userDetails.location }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -120,7 +120,7 @@ export default function MyAccount() {
         break;
 
       case 'paymentInformation':
-        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, {
+        axios.put('https://back-server-1.onrender.com/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

@@ -20,11 +20,11 @@ const Edit = () => {
 
     const fetchProfile = async () => {
         try {
-            const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/', {
+            const response = await fetch('https://back-server-1.onrender.com/profile/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming JWT is stored in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             const data = await response.json();
@@ -45,11 +45,11 @@ const Edit = () => {
         const { firstName, lastName, email, location } = formData;
 
         try {
-            const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update', {
+            const response = await fetch('https://back-server-1.onrender.com/profile/update', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming JWT is stored in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({
                     full_name: `${firstName} ${lastName}`,
