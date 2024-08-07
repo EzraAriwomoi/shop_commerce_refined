@@ -16,7 +16,7 @@ const OrderHistory = () => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:5000/orders/", {
+      const response = await axios.get("https://hp7p5v0d-5000.inc1.devtunnels.ms/orders/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

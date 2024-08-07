@@ -11,7 +11,7 @@ const HMCategories = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/products/categories');
+        const response = await axios.get('https://hp7p5v0d-5000.inc1.devtunnels.ms/products/categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);

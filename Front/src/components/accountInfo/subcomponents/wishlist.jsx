@@ -8,7 +8,7 @@ const SavedItems = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/wishlist/', {
+    fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -24,7 +24,7 @@ const SavedItems = () => {
   }, []);
 
   const handleRemove = (productId) => {
-    fetch(`http://127.0.0.1:5000/wishlist/${productId}`, {
+    fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${productId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,

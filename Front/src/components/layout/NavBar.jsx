@@ -7,8 +7,8 @@ import CustomerAuthComponent from "../customerauthcomponents/CustomerAuthCompone
 import "../../css/layoutcss/layout.css";
 import axios from 'axios';
 
-const NOTIFICATIONS_API_URL = "http://127.0.0.1:5000/notifications/";
-const CART_COUNT_API_URL = "http://127.0.0.1:5000/cart/count";
+const NOTIFICATIONS_API_URL = "https://hp7p5v0d-5000.inc1.devtunnels.ms/notifications/";
+const CART_COUNT_API_URL = "https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/count";
 
 const Navbar = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -110,7 +110,7 @@ const Navbar = () => {
 
     // Backend code to logout from website
     try {
-      const response = await fetch('http://127.0.0.1:5000/auth/logout', {
+      const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ const Navbar = () => {
 
       // Backend code to check if the user is signed in
       try {
-        const response = await axios.get('http://127.0.0.1:5000/auth/status', {
+        const response = await axios.get('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/status', {
           headers: {
             'Authorization': `Bearer ${token}`
           },

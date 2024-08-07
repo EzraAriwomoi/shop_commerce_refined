@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../css/productdetails/productdetails.css";
 
@@ -16,7 +16,7 @@ const RelatedProducts = ({ products }) => {
 
       try {
         const statuses = await Promise.all(products.map(async (product) => {
-          const response = await fetch(`http://127.0.0.1:5000/wishlist/check/${product.id}`, {
+          const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/check/${product.id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const RelatedProducts = ({ products }) => {
     try {
       const user_id = localStorage.getItem('user_id');
 
-      const response = await fetch(`http://127.0.0.1:5000/cart/add`, {
+      const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const RelatedProducts = ({ products }) => {
 
     try {
         const method = wishlistStatuses[productId] ? 'DELETE' : 'POST';
-        const response = await fetch(`http://127.0.0.1:5000/wishlist/${productId}`, {
+        const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${productId}`, {
             method,
             headers: {
                 'Content-Type': 'application/json',

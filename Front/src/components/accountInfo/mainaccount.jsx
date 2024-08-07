@@ -30,7 +30,7 @@ export default function MainAccount() {
     // Fetch user profile details on component mount
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/profile/', {
+        const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/', {
           method: 'GET',
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('token'),
@@ -62,7 +62,7 @@ export default function MainAccount() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/auth/logout', {
+      const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/auth/logout', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('token'),

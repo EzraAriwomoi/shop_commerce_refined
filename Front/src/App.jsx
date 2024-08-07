@@ -17,7 +17,7 @@ import MainAccount from "./components/accountInfo/mainaccount";
 import ContactUs from "./pages/ContactUs";
 import Checkout from "./pages/checkout";
 import AboutUs from "./pages/aboutus";
-import CustomerSignInComponent from "./components/customerauthcomponents/CustomerSignInComponent"; // Ensure the correct path
+import CustomerSignInComponent from "./components/customerauthcomponents/CustomerSignInComponent";
 
 function App() {
   const [isSignInVisible, setIsSignInVisible] = useState(false);
@@ -31,7 +31,6 @@ function App() {
       <main className={isSignInVisible ? "app dimmed" : "app"}>
         <Routes>
           <Route path="/" exact element={<HomePage onSignInClick={toggleSignIn} />} />
-          {/* <Route path="/auth" element={<CustomerAuth />} /> */}
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/shoppingcart" element={<ShoppingcartPage onSignInClick={toggleSignIn} />} />
           <Route path="/products" element={<ProductListPage />} />

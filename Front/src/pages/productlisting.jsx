@@ -16,7 +16,7 @@ const ProductListing = () => {
         const searchParams = new URLSearchParams(location.search);
         const category = searchParams.get('category');
 
-        let url = 'http://127.0.0.1:5000/products/';
+        let url = 'https://hp7p5v0d-5000.inc1.devtunnels.ms/products/';
         if (category) {
             url += `?category=${category}`;
         }

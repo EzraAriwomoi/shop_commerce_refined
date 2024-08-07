@@ -18,7 +18,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://127.0.0.1:5000/products/products/${id}`, {
+                const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/products/products/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const ProductDetails = () => {
                 setLoading(false);
                 
                 // Fetch related products
-                const relatedResponse = await fetch(`http://127.0.0.1:5000/products/related/${id}`, {
+                const relatedResponse = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/related/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const ProductDetails = () => {
             if (!token) return;
 
             try {
-                const response = await fetch(`http://127.0.0.1:5000/wishlist/check/${id}`, {
+                const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/check/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -97,15 +97,15 @@ const ProductDetails = () => {
         setAddingToCart(true);
 
         try {
-            const user_id = localStorage.getItem('user_id'); // Assuming user_id is stored in localStorage
+            const user_id = localStorage.getItem('user_id');
 
-            const response = await fetch(`http://127.0.0.1:5000/cart/add`, {
+            const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ user_id, product_id: product.id, quantity: 1 }), // Use fetched product details
+                body: JSON.stringify({ user_id, product_id: product.id, quantity: 1 }),
             });
 
             if (!response.ok) {
@@ -130,7 +130,7 @@ const ProductDetails = () => {
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:5000/wishlist/${product.id}`, {
+            const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${product.id}`, {
                 method: wishlist ? 'DELETE' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',

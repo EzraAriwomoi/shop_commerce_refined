@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const RPCont = ({ details }) => {
   return (
     <a href="#" className="rp-cont">

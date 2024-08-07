@@ -20,7 +20,7 @@ const Edit = () => {
 
     const fetchProfile = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/profile/', {
+            const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const Edit = () => {
         const { firstName, lastName, email, location } = formData;
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/profile/update', {
+            const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

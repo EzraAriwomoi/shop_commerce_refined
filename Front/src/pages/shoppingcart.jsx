@@ -48,7 +48,7 @@ function ShoppingCartItems({
   const updateQuantity = async (newQuantity) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/cart/update/${product_id}`, {
+      await axios.put(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/update/${product_id}`, {
         product_id: product_id,
         quantity: newQuantity,
       }, {
@@ -72,7 +72,7 @@ function ShoppingCartItems({
   const handleRemoveItem = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`http://localhost:5000/cart/remove/${product_id}`, {
+      const response = await axios.delete(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/remove/${product_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -106,9 +106,6 @@ function ShoppingCartItems({
           <p className="kescountertext">Kes. {product_price}</p>
           <div className="bdy">
             <div className="divhead">
-              {/* <h6 className="oneqtytext">
-                Quantity
-              </h6> */}
               <div className="quantity-controls">
                 <button className="quantity-button" onClick={decreaseQuantity}>-</button>
                 <span className="quantity-display">{quantity}</span>
@@ -142,7 +139,7 @@ export default function ShoppingcartPage() {
   const fetchCartItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/cart/", {
+      const response = await fetch("https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -205,7 +202,7 @@ export default function ShoppingcartPage() {
                   image_url={item.image_url}
                   product_name={item.product_name}
                   product_price={item.product_price}
-                  quantity={item.quantity} // Pass quantity to maintain state
+                  quantity={item.quantity}
                   fetchCartItems={fetchCartItems}
                 />
               ))}

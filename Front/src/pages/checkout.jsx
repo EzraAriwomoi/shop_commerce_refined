@@ -24,7 +24,7 @@ export default function Checkout() {
     const fetchCartItems = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get("http://localhost:5000/cart/", {
+            const response = await axios.get("https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export default function Checkout() {
     const fetchUserProfile = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get("http://localhost:5000/profile/", {
+            const response = await axios.get("https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ export default function Checkout() {
 
     const handleSave = () => {
         const token = localStorage.getItem("token");
-        axios.put('http://127.0.0.1:5000/profile/update-location', { location: temporaryAddress }, {
+        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/update-location', { location: temporaryAddress }, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -136,7 +136,7 @@ export default function Checkout() {
                 created_at: new Date().toISOString(),
             };
 
-            const response = await axios.post("http://localhost:5000/orders/", orderData, {
+            const response = await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/orders/", orderData, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ export default function Checkout() {
             const orderId = response.data.order_id;
 
             if (selectedPaymentMethod === "mpesa") {
-                const mpesaResponse = await axios.post("http://127.0.0.1:5000/mpesa/online/lipa", {
+                const mpesaResponse = await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/mpesa/online/lipa", {
                     order_id: orderId,
                     phone_number: mpesaPhoneNumber,
                     amount: calculateTotal(),
@@ -173,7 +173,7 @@ export default function Checkout() {
                     quantity: item.quantity,
                 }));
 
-                await axios.post("http://localhost:5000/orders/items", orderItems, {
+                await axios.post("https://hp7p5v0d-5000.inc1.devtunnels.ms/orders/items", orderItems, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,

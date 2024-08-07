@@ -15,7 +15,7 @@ const PLPCont = ({ productId, productName, price, imageUrl }) => {
       if (!token) return;
 
       try {
-        const response = await fetch(`http://127.0.0.1:5000/wishlist/check/${productId}`, {
+        const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/check/${productId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ const PLPCont = ({ productId, productName, price, imageUrl }) => {
     try {
       const user_id = localStorage.getItem('user_id');
 
-      const response = await fetch(`http://127.0.0.1:5000/cart/add`, {
+      const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const PLPCont = ({ productId, productName, price, imageUrl }) => {
 
     try {
         const method = wishlist ? 'DELETE' : 'POST';
-        const response = await fetch(`http://127.0.0.1:5000/wishlist/${productId}`, {
+        const response = await fetch(`https://hp7p5v0d-5000.inc1.devtunnels.ms/wishlist/${productId}`, {
             method,
             headers: {
                 'Content-Type': 'application/json',

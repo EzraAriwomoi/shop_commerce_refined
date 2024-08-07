@@ -47,11 +47,11 @@ const EditPassword = () => {
         }
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/profile/change-password', {
+            const response = await fetch('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/change-password', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Assuming JWT is stored in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({
                     old_password: currentPassword,

@@ -1,19 +1,7 @@
+/* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-
-// AuthService functions included directly
-const authService = {
-  authHeader: () => {
-    // Assuming you have a token stored in local storage
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.token) {
-      return { Authorization: `Bearer ${user.token}` };
-    } else {
-      return {};
-    }
-  }
-};
 
 export default function MyAccount() {
   const [userDetails, setUserDetails] = useState({
@@ -34,7 +22,7 @@ export default function MyAccount() {
   useEffect(() => {
     // Fetch user details from backend
     const token = localStorage.getItem("token");
-    axios.get('http://127.0.0.1:5000/profile/', {
+    axios.get('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/', {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -74,7 +62,7 @@ export default function MyAccount() {
 
     switch (section) {
       case 'personalDetails':
-        axios.put('http://127.0.0.1:5000/profile/update-personal-details', {
+        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-personal-details', {
           first_name: userDetails.firstName,
           last_name: userDetails.lastName,
           email: userDetails.email,
@@ -100,7 +88,7 @@ export default function MyAccount() {
           return;
         }
 
-        axios.put('http://127.0.0.1:5000/profile/change-password', {
+        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/change-password', {
           old_password: oldPassword,
           new_password: newPassword
         }, {
@@ -118,7 +106,7 @@ export default function MyAccount() {
       }
 
       case 'shippingAddress':
-        axios.put('http://127.0.0.1:5000/profile/update-location', { location: userDetails.location }, {
+        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-location', { location: userDetails.location }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -132,7 +120,7 @@ export default function MyAccount() {
         break;
 
       case 'paymentInformation':
-        axios.put('http://127.0.0.1:5000/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, {
+        axios.put('https://hp7p5v0d-5000.inc1.devtunnels.ms/profile/update-payment', { mpesaNumber: userDetails.mpesaNumber }, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -379,7 +367,6 @@ function PencilIcon(props) {
   );
 }
 
-// eslint-disable-next-line react/prop-types
 function SelectField({ id, options, value, onChange, disabled }) {
   return (
     <div className="select-field">

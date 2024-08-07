@@ -8,7 +8,7 @@ const HMExplore = () => {
       </section>
       <section className="he-details">
         <h1>Breathtakingly Beautiful</h1>
-        <p>Unleash your story's sparkle. Find your perfect jewel here.</p>
+        <p>Unleash your story&apos;s sparkle. Find your perfect jewel here.</p>
         <button>Explore</button>
       </section>
     </div>
