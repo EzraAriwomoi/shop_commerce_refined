@@ -185,15 +185,7 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleFaBarsClick = () => {
-    setMobileMenuOpen((prev) => !prev);
-  };
+   
 
   return (
     <nav className="navbar">
