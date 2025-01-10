@@ -35,7 +35,7 @@ const ProductListing = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                shuffleArray(data); // Shuffle the array before setting the state
+                shuffleArray(data);
                 setProducts(data);
             } catch (error) {
                 console.error('Error fetching products:', error);
